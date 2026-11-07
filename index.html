@@ -8,72 +8,130 @@
 </head>
 <body>
 
-    <div class="top-header">
-        <div class="brand" onclick="switchTab('home-section', null)">NOX</div>
-        <div class="top-navbar">
-            <button class="nav-tab-btn" onclick="switchTab('games-section', this)">Games</button>
-            <button class="nav-tab-btn" onclick="switchTab('anime-section', this)">Anime</button>
-            <button class="nav-tab-btn" onclick="switchTab('manga-section', this)">Manga</button>
-            <button class="nav-tab-btn" onclick="switchTab('video-section', this)">Videos</button>
+    <!-- Fullscreen Single-Tab Player Overlay -->
+    <div id="inline-stream-layer" class="fullscreen-player-layer" style="display: none;">
+        <div class="player-control-header">
+            <button class="close-stream-btn" onclick="closeStreamPortal()">← Exit Player</button>
+            <span id="active-stream-title"></span>
+        </div>
+        <div class="stream-frame-container">
+            <iframe id="nox-secure-iframe" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups allow-modals" allowfullscreen></iframe>
         </div>
     </div>
 
-    <div class="split-workspace">
-        <div class="content-desk">
-            
-            <div id="inline-stream-layer" class="fullscreen-player-layer" style="display: none;">
-                <div class="player-control-header">
-                    <button class="close-stream-btn" onclick="closeStreamPortal()">← Exit Player</button>
-                    <span id="active-stream-title"></span>
-                </div>
-                <div class="stream-frame-container">
-                    <iframe id="nox-secure-iframe" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups allow-modals" allowfullscreen></iframe>
-                </div>
+    <div class="app-shell">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+            <div class="brand" onclick="switchTab('home-section', document.getElementById('nav-home'))">
+                <span class="brand-icon">N</span> NOX
             </div>
 
+            <nav class="side-nav">
+                <button id="nav-home" class="nav-tab-btn active" onclick="switchTab('home-section', this)">Home</button>
+                <button id="nav-games" class="nav-tab-btn" onclick="switchTab('games-section', this)">Library <span class="nav-badge" id="total-games-badge">800+</span></button>
+                <button class="nav-tab-btn" onclick="switchTab('anime-section', this)">Anime</button>
+                <button class="nav-tab-btn" onclick="switchTab('manga-section', this)">Manga</button>
+                <button class="nav-tab-btn" onclick="switchTab('video-section', this)">Videos</button>
+                <button class="nav-tab-btn" onclick="launchRandomGame()">Random Game</button>
+            </nav>
+
+            <div class="sidebar-promo-card">
+                <div class="promo-title">800+ Titles Ready</div>
+                <p>Instant single-tab browser play with saved favorites.</p>
+                <button class="promo-btn" onclick="switchTab('games-section', document.getElementById('nav-games'))">Go to library</button>
+            </div>
+        </aside>
+
+        <!-- Center Main Stage -->
+        <main class="main-stage">
+            <header class="top-search-bar">
+                <input type="text" id="global-search" placeholder="Search 800+ games..." onkeyup="handleGlobalSearch(this.value)" class="search-input">
+                <button class="pill-btn" id="fav-filter-btn" onclick="toggleFavoritesFilter()">★ Favorites Only</button>
+            </header>
+
+            <!-- HOME DASHBOARD -->
             <div id="home-section" class="tab-content">
-                <div class="info-card">
-                    <h3>Welcome</h3>
-                    <p>Select Games, Anime, Manga, or Videos above to get started.</p>
+                <div class="hero-banner" style="background-image: linear-gradient(to right, rgba(19, 19, 26, 0.95) 35%, rgba(19, 19, 26, 0.35)), url('gameimages/hollowknight.png');">
+                    <div class="hero-tags">
+                        <span>Action</span>
+                        <span>Platformer</span>
+                        <span>Adventure</span>
+                        <span>Indie</span>
+                    </div>
+                    <h1 class="hero-title">Hollow Knight</h1>
+                    <p class="hero-desc">Explore twisting caverns, battle tainted creatures, and uncover ancient mysteries in a vast hand-drawn subterranean kingdom.</p>
+                    <div class="hero-actions">
+                        <button class="hero-play-btn" onclick="launchStreamPortal('Hollow Knight', 'gamefiles/Hollow Knight.html')">Play Now</button>
+                        <button class="hero-heart-btn" onclick="switchTab('games-section', document.getElementById('nav-games'))" title="Browse All Games">♥</button>
+                    </div>
+                </div>
+
+                <div class="home-bottom-split">
+                    <div class="featured-column">
+                        <div class="section-header">
+                            <h2>Featured games</h2>
+                            <button class="text-link-btn" onclick="switchTab('games-section', document.getElementById('nav-games'))">View all →</button>
+                        </div>
+                        <div class="featured-cards-row" id="featured-games-row"></div>
+                    </div>
+
+                    <div class="recent-column">
+                        <div class="section-header">
+                            <h2>Recently played</h2>
+                        </div>
+                        <div class="recent-list" id="recent-games-list">
+                            <div class="empty-note">Launch any game to track your history here.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- GAMES LIBRARY -->
             <div id="games-section" class="tab-content" style="display: none;">
-                <div class="grid-title">Games Hub</div>
-                <input type="text" id="game-search" placeholder="Search 800+ games..." onkeyup="filterGames()" class="search-input">
+                <div class="section-header">
+                    <h2>Games Library</h2>
+                </div>
                 <div class="media-grid"></div>
             </div>
 
+            <!-- ANIME -->
             <div id="anime-section" class="tab-content" style="display: none;">
-                <div class="grid-title">Anime Portals</div>
+                <div class="section-header">
+                    <h2>Anime Portals</h2>
+                </div>
                 <div class="media-grid"></div>
             </div>
 
+            <!-- MANGA -->
             <div id="manga-section" class="tab-content" style="display: none;">
-                <div class="grid-title">Manga Vault</div>
+                <div class="section-header">
+                    <h2>Manga Vault</h2>
+                </div>
                 <div class="media-grid"></div>
             </div>
 
+            <!-- VIDEOS -->
             <div id="video-section" class="tab-content" style="display: none;">
-                <div class="grid-title">Video Mirrors</div>
+                <div class="section-header">
+                    <h2>Video Mirrors</h2>
+                </div>
                 <div class="media-grid"></div>
             </div>
+        </main>
 
-        </div>
-
-        <div class="status-sidebar">
-            <div>
-                <div class="widget-title">System Status</div>
-                <div class="status-item">
-                    <span>Games Library</span>
-                    <div><span class="indicator-dot dot-online"></span></div>
-                </div>
-                <div class="status-item">
-                    <span>Local Players</span>
-                    <div><span class="indicator-dot dot-online"></span></div>
+        <!-- Right Quick-Launch Sidebar -->
+        <aside class="right-sidebar">
+            <div class="profile-pill">
+                <div class="avatar-circle">NX</div>
+                <div>
+                    <div class="profile-name">Nox Player</div>
+                    <div class="profile-sub">Single-Tab Mode</div>
                 </div>
             </div>
-        </div>
+
+            <div class="widget-title">Quick Launch</div>
+            <div class="quick-launch-list" id="quick-launch-list"></div>
+        </aside>
     </div>
 
     <script src="./js/games-data.js"></script>
