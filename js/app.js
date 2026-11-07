@@ -3,7 +3,9 @@ function switchTab(sectionId, buttonElement) {
     document.querySelectorAll('.tab-content').forEach(panel => {
         panel.style.display = 'none';
     });
-    document.getElementById(sectionId).style.display = 'block';
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) targetSection.style.display = 'block';
+
     document.querySelectorAll('.nav-tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
@@ -13,6 +15,7 @@ function switchTab(sectionId, buttonElement) {
 }
 
 function launchStreamPortal(name, hostUrl) {
+    if (!hostUrl || hostUrl === 'URL_HERE') return;
     document.getElementById('active-stream-title').innerText = "Playing: " + name;
     document.getElementById('nox-secure-iframe').src = hostUrl;
     document.getElementById('inline-stream-layer').style.display = "flex";
@@ -28,15 +31,32 @@ function loadGamesGrid() {
     const gridContainer = document.querySelector('#games-section .media-grid');
     if (!gridContainer || typeof games === 'undefined') return;
 
-    gridContainer.innerHTML = games;
+    gridContainer.innerHTML = games.replace(/<img /g, '<img loading="lazy" ');
 
-    gridContainer.querySelectorAll('.game-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const title = this.querySelector('div').innerText;
-            const url = this.getAttribute('href');
-            launchStreamPortal(title, url);
-        });
+    gridContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.gams-star')) return;
+        const link = e.target.closest('.game-link');
+        if (!link) return;
+
+        e.preventDefault();
+        const title = link.querySelector('div').innerText;
+        const url = link.getAttribute('href');
+        launchStreamPortal(title, url);
+    });
+}
+
+function loadStreamsGrid() {
+    if (typeof streamsList === 'undefined') return;
+
+    streamsList.forEach(item => {
+        const container = document.querySelector(`#${item.section} .media-grid`);
+        if (!container) return;
+
+        const card = document.createElement('div');
+        card.className = 'media-card';
+        card.innerHTML = `<h5>${item.title}</h5>`;
+        card.addEventListener('click', () => launchStreamPortal(item.title, item.url));
+        container.appendChild(card);
     });
 }
 
@@ -50,4 +70,5 @@ function filterGames() {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadGamesGrid();
+    loadStreamsGrid();
 });
