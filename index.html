@@ -8,10 +8,9 @@
 </head>
 <body>
 
-    <!-- Fullscreen Single-Tab Player Overlay -->
     <div id="inline-stream-layer" class="fullscreen-player-layer" style="display: none;">
         <div class="player-control-header">
-            <button class="close-stream-btn" onclick="closeStreamPortal()">← Exit Player</button>
+            <button class="close-stream-btn" onclick="closeStreamPortal()">← Back</button>
             <span id="active-stream-title"></span>
         </div>
         <div class="stream-frame-container">
@@ -20,7 +19,6 @@
     </div>
 
     <div class="app-shell">
-        <!-- Left Sidebar -->
         <aside class="left-sidebar">
             <div class="brand" onclick="switchTab('home-section', document.getElementById('nav-home'))">
                 <span class="brand-icon">N</span> NOX
@@ -32,44 +30,46 @@
                 <button class="nav-tab-btn" onclick="switchTab('anime-section', this)">Anime</button>
                 <button class="nav-tab-btn" onclick="switchTab('manga-section', this)">Manga</button>
                 <button class="nav-tab-btn" onclick="switchTab('video-section', this)">Videos</button>
-                <button class="nav-tab-btn" onclick="launchRandomGame()">Random Game</button>
+                <button class="nav-tab-btn" onclick="launchRandomGame()">Random</button>
             </nav>
 
             <div class="sidebar-promo-card">
-                <div class="promo-title">800+ Titles Ready</div>
-                <p>Instant single-tab browser play with saved favorites.</p>
+                <div class="promo-title">Full Collection</div>
+                <p>Browse all titles and manage your saved favorites.</p>
                 <button class="promo-btn" onclick="switchTab('games-section', document.getElementById('nav-games'))">Go to library</button>
             </div>
         </aside>
 
-        <!-- Center Main Stage -->
         <main class="main-stage">
             <header class="top-search-bar">
-                <input type="text" id="global-search" placeholder="Search 800+ games..." onkeyup="handleGlobalSearch(this.value)" class="search-input">
-                <button class="pill-btn" id="fav-filter-btn" onclick="toggleFavoritesFilter()">★ Favorites Only</button>
+                <input type="text" id="global-search" placeholder="Search..." onkeyup="handleGlobalSearch(this.value)" class="search-input">
+                <button class="pill-btn" id="fav-filter-btn" onclick="toggleFavoritesFilter()">★ Favorites</button>
             </header>
 
-            <!-- HOME DASHBOARD -->
             <div id="home-section" class="tab-content">
-                <div class="hero-banner" style="background-image: linear-gradient(to right, rgba(19, 19, 26, 0.95) 35%, rgba(19, 19, 26, 0.35)), url('gameimages/hollowknight.png');">
-                    <div class="hero-tags">
-                        <span>Action</span>
-                        <span>Platformer</span>
-                        <span>Adventure</span>
-                        <span>Indie</span>
+                <div class="hero-carousel-wrapper">
+                    <div class="hero-banner" id="hero-banner">
+                        <button class="hero-arrow prev" onclick="cycleHero(-1)">‹</button>
+                        <button class="hero-arrow next" onclick="cycleHero(1)">›</button>
+
+                        <div class="hero-tags" id="hero-tags"></div>
+                        <h1 class="hero-title" id="hero-title">Hollow Knight</h1>
+                        <p class="hero-desc" id="hero-desc"></p>
+                        <div class="hero-meta" id="hero-meta"></div>
+
+                        <div class="hero-actions">
+                            <button class="hero-play-btn" id="hero-play-btn">Play Now</button>
+                            <button class="hero-secondary-btn" onclick="switchTab('games-section', document.getElementById('nav-games'))">+ Library</button>
+                        </div>
                     </div>
-                    <h1 class="hero-title">Hollow Knight</h1>
-                    <p class="hero-desc">Explore twisting caverns, battle tainted creatures, and uncover ancient mysteries in a vast hand-drawn subterranean kingdom.</p>
-                    <div class="hero-actions">
-                        <button class="hero-play-btn" onclick="launchStreamPortal('Hollow Knight', 'gamefiles/Hollow Knight.html')">Play Now</button>
-                        <button class="hero-heart-btn" onclick="switchTab('games-section', document.getElementById('nav-games'))" title="Browse All Games">♥</button>
-                    </div>
+
+                    <div class="hero-selector-row" id="hero-selector-row"></div>
                 </div>
 
                 <div class="home-bottom-split">
                     <div class="featured-column">
                         <div class="section-header">
-                            <h2>Featured games</h2>
+                            <h2><span class="accent-bar"></span>Trending Now</h2>
                             <button class="text-link-btn" onclick="switchTab('games-section', document.getElementById('nav-games'))">View all →</button>
                         </div>
                         <div class="featured-cards-row" id="featured-games-row"></div>
@@ -77,55 +77,50 @@
 
                     <div class="recent-column">
                         <div class="section-header">
-                            <h2>Recently played</h2>
+                            <h2><span class="accent-bar"></span>Recently Played</h2>
                         </div>
                         <div class="recent-list" id="recent-games-list">
-                            <div class="empty-note">Launch any game to track your history here.</div>
+                            <div class="empty-note">Nothing played yet.</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- GAMES LIBRARY -->
             <div id="games-section" class="tab-content" style="display: none;">
                 <div class="section-header">
-                    <h2>Games Library</h2>
+                    <h2><span class="accent-bar"></span>Library</h2>
                 </div>
                 <div class="media-grid"></div>
             </div>
 
-            <!-- ANIME -->
             <div id="anime-section" class="tab-content" style="display: none;">
                 <div class="section-header">
-                    <h2>Anime Portals</h2>
+                    <h2><span class="accent-bar"></span>Anime</h2>
                 </div>
                 <div class="media-grid"></div>
             </div>
 
-            <!-- MANGA -->
             <div id="manga-section" class="tab-content" style="display: none;">
                 <div class="section-header">
-                    <h2>Manga Vault</h2>
+                    <h2><span class="accent-bar"></span>Manga</h2>
                 </div>
                 <div class="media-grid"></div>
             </div>
 
-            <!-- VIDEOS -->
             <div id="video-section" class="tab-content" style="display: none;">
                 <div class="section-header">
-                    <h2>Video Mirrors</h2>
+                    <h2><span class="accent-bar"></span>Videos</h2>
                 </div>
                 <div class="media-grid"></div>
             </div>
         </main>
 
-        <!-- Right Quick-Launch Sidebar -->
         <aside class="right-sidebar">
             <div class="profile-pill">
                 <div class="avatar-circle">NX</div>
                 <div>
-                    <div class="profile-name">Nox Player</div>
-                    <div class="profile-sub">Single-Tab Mode</div>
+                    <div class="profile-name">Player 1</div>
+                    <div class="profile-sub">Online</div>
                 </div>
             </div>
 
