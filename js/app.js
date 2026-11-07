@@ -26,24 +26,28 @@ function closeStreamPortal() {
 
 function loadGamesGrid() {
     const gridContainer = document.querySelector('#games-section .media-grid');
-    if (!gridContainer || typeof noxGamesDatabase === 'undefined') return;
+    if (!gridContainer || typeof games === 'undefined') return;
 
-    gridContainer.innerHTML = ''; 
+    gridContainer.innerHTML = games;
 
-    noxGamesDatabase.forEach(game => {
-        const card = document.createElement('div');
-        card.className = 'media-card';
-        
-        card.onclick = function() {
-            launchStreamPortal(game.title, `./games/${game.folder}/index.html`);
-        };
+    gridContainer.querySelectorAll('.game-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const title = this.querySelector('div').innerText;
+            const url = this.getAttribute('href');
+            launchStreamPortal(title, url);
+        });
+    });
+}
 
-        card.innerHTML = `<h5>${game.title}</h5>`;
-        gridContainer.appendChild(card);
+function filterGames() {
+    const query = document.getElementById('game-search').value.toLowerCase();
+    document.querySelectorAll('#games-section .game-link').forEach(card => {
+        const title = card.querySelector('div').innerText.toLowerCase();
+        card.style.display = title.includes(query) ? 'flex' : 'none';
     });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     loadGamesGrid();
 });
-
