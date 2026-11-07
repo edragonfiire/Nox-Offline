@@ -34,7 +34,7 @@
             <div id="home-section" class="tab-content">
                 <div class="info-card">
                     <h3>Welcome</h3>
-                    <p>Select a tab above to browse your games, videos, or local media readers.</p>
+                    <p>Everything runs right inside this single tab. Choose Games, Anime, Manga, or Videos above.</p>
                 </div>
             </div>
 
@@ -45,27 +45,25 @@
             </div>
 
             <div id="anime-section" class="tab-content" style="display: none;">
-                <div class="grid-title">Anime Portals</div>
+                <div class="grid-title">Anime & Episodes (Local / YouTube Embeds)</div>
                 <div class="media-grid">
-                    <div class="media-card" onclick="launchStreamPortal('Local Video Player', './stream-players/video-player.html')"><h5>Local Video Player</h5></div>
-                    <a class="media-card" href="https://crunchyroll.com" target="_blank" rel="noopener noreferrer"><h5>Crunchyroll</h5></a>
-                    <a class="media-card" href="https://youtube.com" target="_blank" rel="noopener noreferrer"><h5>Muse Asia (YouTube)</h5></a>
+                    <div class="media-card" onclick="launchStreamPortal('Episode Player', './stream-players/video-player.html')"><h5>Open Episode Player</h5></div>
+                    <div class="media-card" onclick="launchStreamPortal('Muse Asia Official Stream', 'https://youtube.com')"><h5>YouTube Playlist Embed</h5></div>
                 </div>
             </div>
 
             <div id="manga-section" class="tab-content" style="display: none;">
-                <div class="grid-title">Manga Vault</div>
+                <div class="grid-title">Manga & Comic Reader (Local Files)</div>
                 <div class="media-grid">
-                    <div class="media-card" onclick="launchStreamPortal('Local Manga Reader', './stream-players/manga-reader.html')"><h5>Local Manga Reader</h5></div>
-                    <a class="media-card" href="https://shueisha.co.jp" target="_blank" rel="noopener noreferrer"><h5>MANGA Plus</h5></a>
+                    <div class="media-card" onclick="launchStreamPortal('Manga Reader', './stream-players/manga-reader.html')"><h5>Open Local Manga Reader</h5></div>
                 </div>
             </div>
 
             <div id="video-section" class="tab-content" style="display: none;">
-                <div class="grid-title">Video Player</div>
+                <div class="grid-title">Videos & YouTube</div>
                 <div class="media-grid">
                     <div class="media-card" onclick="launchStreamPortal('Video & YouTube Player', './stream-players/video-player.html')"><h5>Open Video Player</h5></div>
-                    <div class="media-card" onclick="launchStreamPortal('YouTube Lofi Stream', 'https://youtube.com')"><h5>YouTube Embed Test</h5></div>
+                    <div class="media-card" onclick="launchStreamPortal('Lofi Beats Stream', 'https://youtube.com')"><h5>YouTube Embed Test</h5></div>
                 </div>
             </div>
 
@@ -75,7 +73,7 @@
             <div>
                 <div class="widget-title">System Status</div>
                 <div class="status-item">
-                    <span>Games Library</span>
+                    <span>Single-Tab Mode</span>
                     <div><span class="indicator-dot dot-online"></span></div>
                 </div>
                 <div class="status-item">
