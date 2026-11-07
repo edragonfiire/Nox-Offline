@@ -69,7 +69,7 @@ body {
 
 .fullscreen-player-layer {
     position: fixed; inset: 0; width: 100%; height: 100%;
-    background-color: #000; z-index: 9999; display: none; flex-direction: column;
+    background-color: #000; z-index: 200000; display: none; flex-direction: column;
 }
 .player-control-header {
     background-color: var(--bg-surface); padding: 10px 15px;
