@@ -1,1 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nox</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <div class="top-header">
+        <div class="brand" onclick="switchTab('home-section', null)">NOX</div>
+        <div class="top-navbar">
+            <button class="nav-tab-btn" onclick="switchTab('games-section', this)">Games</button>
+            <button class="nav-tab-btn" onclick="switchTab('anime-section', this)">Anime</button>
+            <button class="nav-tab-btn" onclick="switchTab('manga-section', this)">Manga</button>
+            <button class="nav-tab-btn" onclick="switchTab('video-section', this)">Videos</button>
+        </div>
+    </div>
+
+    <div class="split-workspace">
+        <div class="content-desk">
+            
+            <div id="inline-stream-layer" class="fullscreen-player-layer">
+                <div class="player-control-header">
+                    <button class="close-stream-btn" onclick="closeStreamPortal()">← Exit Player</button>
+                    <span id="active-stream-title"></span>
+                </div>
+                <div class="stream-frame-container">
+                    <iframe id="nox-secure-iframe" src="" sandbox="allow-scripts allow-same-origin allow-forms" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div id="home-section" class="tab-content">
+                <div class="info-card">
+                    <h3>Welcome</h3>
+                </div>
+            </div>
+
+            <div id="games-section" class="tab-content" style="display: none;">
+                <div class="grid-title">Games Hub</div>
+            </div>
+
+            <div id="anime-section" class="tab-content" style="display: none;">
+                <div class="grid-title">Anime Portals</div>
+                <div class="media-grid">
+                    <div class="media-card" onclick="launchStreamPortal('Anix', 'https://anix.to')"><h5>Anix</h5></div>
+                    <div class="media-card" onclick="launchStreamPortal('Aniwave', 'https://aniwave.to')"><h5>Aniwave</h5></div>
+                </div>
+            </div>
+
+            <div id="manga-section" class="tab-content" style="display: none;">
+                <div class="grid-title">Manga Vault</div>
+            </div>
+
+            <div id="video-section" class="tab-content" style="display: none;">
+                <div class="grid-title">Video Mirrors</div>
+                <div class="media-grid">
+                    <div class="media-card" onclick="launchStreamPortal('Piped', 'https://piped.video')"><h5>Piped</h5></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="status-sidebar">
+            <div>
+                <div class="widget-title">Server Status</div>
+                <div class="status-item">
+                    <span>Anix</span>
+                    <div><span class="indicator-dot dot-online"></span></div>
+                </div>
+                <div class="status-item">
+                    <span>Aniwave</span>
+                    <div><span class="indicator-dot dot-warning"></span></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="widget-title">Top Played</div>
+                <div class="leaderboard-item"><span class="rank-num">1</span><span>Pixel RPG</span></div>
+                <div class="leaderboard-item"><span class="rank-num">2</span><span>Retro Arcade</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/app.js"></script>
+</body>
+</html>
 
