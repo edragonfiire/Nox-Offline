@@ -1,1 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nox Manga Reader</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+  body { background: #121214; color: #f1f1f4; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; background: #1a1a1e; padding: 10px 15px; border-bottom: 1px solid #2c2c35; align-items: center; }
+  button, .file-label { background: #26262b; color: #f1f1f4; border: 1px solid #2c2c35; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  button:hover, .file-label:hover { border-color: #3b82f6; background: #3b82f6; color: #fff; }
+  input[type="file"] { display: none; }
+  .page-info { margin-left: auto; font-size: 13px; color: #8e8e9a; }
+  .reader-area { flex: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 15px; gap: 8px; }
+  .reader-area img { max-width: 850px; width: 100%; height: auto; border-radius: 2px; }
+  .placeholder { color: #8e8e9a; margin-top: 80px; font-size: 14px; text-align: center; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <label class="file-label">
+      Select Chapter Folder
+      <input type="file" id="folderInput" webkitdirectory multiple accept="image/*">
+    </label>
+    <label class="file-label">
+      Select Image Files
+      <input type="file" id="filesInput" multiple accept="image/*">
+    </label>
+    <button onclick="toggleMode()" id="modeBtn">Mode: Vertical Scroll</button>
+    <button onclick="changePage(-1)" id="prevBtn" style="display:none;">← Prev</button>
+    <button onclick="changePage(1)" id="nextBtn" style="display:none;">Next →</button>
+    <span class="page-info" id="pageInfo">No chapter loaded</span>
+  </div>
+
+  <div class="reader-area" id="readerArea">
+    <div class="placeholder">Load a local folder or group of manga/comic image pages above.<br>Use Left/Right arrow keys in Single Page mode.</div>
+  </div>
+
+<script>
+  let pages = [];
+  let currentIndex = 0;
+  let singlePageMode = false;
+
+  const readerArea = document.getElementById('readerArea');
+  const pageInfo = document.getElementById('pageInfo');
+  const modeBtn = document.getElementById('modeBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function handleFiles(fileList) {
+    const imgs = Array.from(fileList)
+      .filter(f => f.type.startsWith('image/'))
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+    if (!imgs.length) return;
+    pages.forEach(url => URL.revokeObjectURL(url));
+    pages = imgs.map(f => URL.createObjectURL(f));
+    currentIndex = 0;
+    render();
+  }
+
+  document.getElementById('folderInput').addEventListener('change', e => handleFiles(e.target.files));
+  document.getElementById('filesInput').addEventListener('change', e => handleFiles(e.target.files));
+
+  function toggleMode() {
+    singlePageMode = !singlePageMode;
+    modeBtn.innerText = singlePageMode ? 'Mode: Single Page' : 'Mode: Vertical Scroll';
+    prevBtn.style.display = singlePageMode ? 'inline-block' : 'none';
+    nextBtn.style.display = singlePageMode ? 'inline-block' : 'none';
+    render();
+  }
+
+  function changePage(delta) {
+    if (!pages.length) return;
+    currentIndex = Math.max(0, Math.min(pages.length - 1, currentIndex + delta));
+    render();
+  }
+
+  function render() {
+    if (!pages.length) return;
+    readerArea.innerHTML = '';
+    readerArea.scrollTop = 0;
+
+    if (singlePageMode) {
+      const img = document.createElement('img');
+      img.src = pages[currentIndex];
+      readerArea.appendChild(img);
+      pageInfo.innerText = `Page ${currentIndex + 1} / ${pages.length}`;
+    } else {
+      pages.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.loading = 'lazy';
+        readerArea.appendChild(img);
+      });
+      pageInfo.innerText = `${pages.length} pages loaded`;
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!singlePageMode) return;
+    if (e.key === 'ArrowRight') changePage(1);
+    if (e.key === 'ArrowLeft') changePage(-1);
+  });
+</script>
+</body>
+</html>
 
