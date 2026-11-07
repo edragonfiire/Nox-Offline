@@ -1,1 +1,71 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nox Video Player</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+  body { background: #121214; color: #f1f1f4; display: flex; flex-direction: column; height: 100vh; padding: 15px; gap: 12px; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; background: #1a1a1e; padding: 12px; border: 1px solid #2c2c35; border-radius: 4px; align-items: center; }
+  input[type="text"] { flex: 1; min-width: 240px; padding: 8px 10px; background: #121214; border: 1px solid #2c2c35; color: #f1f1f4; border-radius: 4px; font-size: 13px; }
+  input[type="text"]:focus { outline: none; border-color: #3b82f6; }
+  button { background: #26262b; color: #f1f1f4; border: 1px solid #2c2c35; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  button:hover { border-color: #3b82f6; background: #3b82f6; color: #fff; }
+  .stage { flex: 1; background: #000; border: 1px solid #2c2c35; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  iframe { width: 100%; height: 100%; border: none; display: none; }
+  .placeholder { color: #8e8e9a; font-size: 14px; text-align: center; padding: 20px; }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <input type="text" id="ytInput" placeholder="Paste YouTube Video URL, Playlist URL, or Video ID..." onkeydown="if(event.key==='Enter') loadYouTube()">
+    <button onclick="loadYouTube()">Play Video</button>
+  </div>
+
+  <div class="stage">
+    <div id="placeholder" class="placeholder">Paste a YouTube video link, playlist link, or 11-character ID above and click Play Video.</div>
+    <iframe id="ytPlayer" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+<script>
+  const placeholder = document.getElementById('placeholder');
+  const ytPlayer = document.getElementById('ytPlayer');
+
+  function buildEmbedUrl(input) {
+    const clean = input.trim();
+    if (!clean) return null;
+
+    const listMatch = clean.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+    const vidMatch = clean.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([a-zA-Z0-9_-]{11})/);
+
+    if (vidMatch && listMatch) {
+      return `https://youtube-nocookie.com{vidMatch[1]}?list=${listMatch[1]}&autoplay=1`;
+    }
+    if (listMatch) {
+      return `https://youtube-nocookie.com{listMatch[1]}&autoplay=1`;
+    }
+    if (vidMatch) {
+      return `https://youtube-nocookie.com{vidMatch[1]}?autoplay=1`;
+    }
+    if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) {
+      return `https://youtube-nocookie.com{clean}?autoplay=1`;
+    }
+    return null;
+  }
+
+  function loadYouTube() {
+    const embedUrl = buildEmbedUrl(document.getElementById('ytInput').value);
+    if (!embedUrl) {
+      alert('Please enter a valid YouTube video URL, playlist URL, or 11-character video ID.');
+      return;
+    }
+    placeholder.style.display = 'none';
+    ytPlayer.src = embedUrl;
+    ytPlayer.style.display = 'block';
+  }
+</script>
+</body>
+</html>
