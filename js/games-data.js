@@ -319,10 +319,6 @@ const games = `
     <img loading="lazy" src="gameimages/basketrandom.png" alt="Basket Random">
     <div>Basket Random</div>
 </a>
-<a class="game-link" href="gamefiles/Basketrandom.html">
-    <img loading="lazy" src="gameimages/basketrandom.png" alt="Basketrandom">
-    <div>Basketrandom</div>
-</a>
 <a class="game-link" href="gamefiles/Battle Simulator.html">
     <img loading="lazy" src="gameimages/battlesimulator.jpg" alt="Battle Simulator">
     <div>Battle Simulator</div>
@@ -647,10 +643,6 @@ const games = `
     <img loading="lazy" src="gameimages/classof09there-up.webp" alt="class of 09 the re-up">
     <div>class of 09 the re-up</div>
 </a>
-<a class="game-link" href="gamefiles/classof09there-up.html">
-    <img loading="lazy" src="gameimages/classof09there-up.webp" alt="classof09there-up">
-    <div>classof09there-up</div>
-</a>
 <a class="game-link" href="gamefiles/Clothing Shop 3D.html">
     <img loading="lazy" src="gameimages/clothingshop3d.png" alt="Clothing Shop 3D">
     <div>Clothing Shop 3D</div>
@@ -675,10 +667,6 @@ const games = `
     <img loading="lazy" src="gameimages/command&conquer.png" alt="Command & Conquer">
     <div>Command & Conquer</div>
 </a>
-<a class="game-link" href="gamefiles/command&conquer.html">
-    <img loading="lazy" src="gameimages/command&conquer.png" alt="command&conquer">
-    <div>command&conquer</div>
-</a>
 <a class="game-link" href="gamefiles/Cookie Clicker.html">
     <img loading="lazy" src="gameimages/cookieclicker.png" alt="Cookie Clicker">
     <div>Cookie Clicker</div>
@@ -698,10 +686,6 @@ const games = `
 <a class="game-link" href="gamefiles/Counter Strike 1.6.html">
     <img loading="lazy" src="gameimages/counterstrike1.6.jpg" alt="Counter Strike 1.6">
     <div>Counter Strike 1.6</div>
-</a>
-<a class="game-link" href="gamefiles/counterstrike1.6.html">
-    <img loading="lazy" src="gameimages/counterstrike1.6.jpg" alt="counterstrike1.6">
-    <div>counterstrike1.6</div>
 </a>
 <a class="game-link" href="gamefiles/Counter Strike DS.html">
     <img loading="lazy" src="gameimages/counterstrikeds.png" alt="Counter Strike DS">
@@ -856,7 +840,7 @@ const games = `
     <div>Dig Deep</div>
 </a>
 <a class="game-link" href="gamefiles/Friday Night Funkin.html">
-    <img loading="lazy" src="gameimages/fridaynightfunkin.webp" alt="Friday Night Funkin">
+    <img loading="lazy" src="gameimages/fnf.webp" alt="Friday Night Funkin">
     <div>Friday Night Funkin</div>
 </a>
 <a class="game-link" href="gamefiles/Doge Miner 2.html">
@@ -1184,7 +1168,7 @@ const games = `
     <div>Fortzone Battle Royale</div>
 </a>
 <a class="game-link" href="https://www.fridaynightfunkin.net">
-    <img loading="lazy" src="gameimages/fridaynightfunkin.webp" alt="Friday Night Funkin Net">
+    <img loading="lazy" src="gameimages/fnf.webp" alt="Friday Night Funkin Net">
     <div>Friday Night Funkin Mod Weeks</div>
 </a>
 <a class="game-link" href="gamefiles/Friday Night Funkin Vs. Hatsune Miku.html">
@@ -2023,10 +2007,6 @@ const games = `
     <img loading="lazy" src="gameimages/paper.io2.jpg" alt="Paper.io 2">
     <div>Paper.io 2</div>
 </a>
-<a class="game-link" href="gamefiles/paper.io2.html">
-    <img loading="lazy" src="gameimages/paper.io2.jpg" alt="paper.io2">
-    <div>paper.io2</div>
-</a>
 <a class="game-link" href="gamefiles/Paper Mario.html">
     <img loading="lazy" src="gameimages/papermario.jpg" alt="Paper Mario">
     <div>Paper Mario</div>
@@ -2811,10 +2791,6 @@ const games = `
     <img loading="lazy" src="gameimages/supermonkeyball1&2.png" alt="Super Monkey Ball 1&2">
     <div>Super Monkey Ball 1&2</div>
 </a>
-<a class="game-link" href="gamefiles/supermonkeyball1&2.html">
-    <img loading="lazy" src="gameimages/supermonkeyball1&2.png" alt="supermonkeyball1&2">
-    <div>supermonkeyball1&2</div>
-</a>
 <a class="game-link" href="gamefiles/Super Monkey Ball Jr.html">
     <img loading="lazy" src="gameimages/supermonkeyballjr.png" alt="Super Monkey Ball Jr">
     <div>Super Monkey Ball Jr</div>
@@ -3347,7 +3323,8 @@ const games = `
 // GAMS PERSISTENT BOOKMARK SYSTEM
 document.addEventListener("DOMContentLoaded", () => {
     // 1. Target Selector: Set this to match whatever class holds your individual game items
-    const CARD_CLASS = ".game-card"; 
+    
+    const CARD_CLASS = ".game-link"; 
     
     let favorites = JSON.parse(localStorage.getItem("gams_bookmarks")) || [];
 
@@ -3389,7 +3366,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (card.querySelector('.gams-star')) return; // Skip if already starred
 
             // Use your title or fallback index as the identity marker
-            const textEl = card.querySelector('p') || card.querySelector('span');
+            const textEl = card.querySelector('div') || card.querySelector('p') || card.querySelector('span');
             const gameId = card.getAttribute("data-id") || (textEl ? textEl.innerText.trim().replace(/\s+/g, '-').toLowerCase() : `game-${index}`);
             card.setAttribute("data-id", gameId);
 
