@@ -1018,3 +1018,87 @@ transition: all 0.15s ease;
 .profile-name {
     color: #c4b5fd;
 }
+body.light-mode {
+    --bg-outer: #eef2f9;
+    --bg-panel: #ffffff;
+    --bg-card: #ffffff;
+    --bg-hover: #f1f5f9;
+    --border-color: rgba(15, 23, 42, 0.1);
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --card-gradient: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%);
+    background-color: #eef2f9;
+    background-image:
+        linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+        radial-gradient(circle at 15% 15%, rgba(124, 58, 237, 0.1) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.08) 0%, transparent 45%);
+    color: #0f172a;
+}
+
+body.light-mode .left-sidebar,
+body.light-mode .right-sidebar {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(15, 23, 42, 0.1);
+}
+
+body.light-mode .brand {
+    background: linear-gradient(90deg, #1e1b4b 35%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .nav-tab-btn.active {
+    background: rgba(124, 58, 237, 0.12);
+    color: #6d28d9;
+}
+
+body.light-mode .subpage-banner {
+    background: linear-gradient(135deg, #ffffff 0%, #f3e8ff 65%, #e0f2fe 100%);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+body.light-mode .subpage-title {
+    background: linear-gradient(90deg, #0f172a 25%, #6d28d9 75%, #0284c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .section-header h2 {
+    color: #1e1b4b;
+}
+
+body.light-mode .subpage-sub,
+body.light-mode .portal-card-desc {
+    color: #475569;
+}
+
+body.light-mode .portal-card-title,
+body.light-mode .game-link > div,
+body.light-mode .quick-item-title,
+body.light-mode .recent-item-title,
+body.light-mode .top-media-title {
+    color: #0f172a;
+}
+
+body.light-mode .portal-card-footer {
+    color: #6d28d9;
+    border-top-color: rgba(15, 23, 42, 0.08);
+}
+
+body.light-mode .top-media-item,
+body.light-mode .hero-thumb-card,
+body.light-mode .recent-item,
+body.light-mode .portal-card,
+body.light-mode .game-link {
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+body.light-mode .profile-name {
+    color: #6d28d9;
+}
+
+body.light-mode .widget-title {
+    color: #6d28d9;
+}
