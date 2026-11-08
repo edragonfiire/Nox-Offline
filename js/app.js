@@ -55,20 +55,20 @@ const topMediaCache = { anime: null, manga: null };
 
 const fallbackTopMedia = {
     anime: [
-        { title: "Frieren: Beyond Journey's End", score: "9.32", sub: "28 eps", img: "https://myanimelist.net" },
-        { title: "Fullmetal Alchemist: Brotherhood", score: "9.09", sub: "64 eps", img: "https://myanimelist.net" },
-        { title: "Steins;Gate", score: "9.07", sub: "24 eps", img: "https://myanimelist.net" },
-        { title: "Attack on Titan", score: "8.95", sub: "Final Season", img: "https://myanimelist.net" },
-        { title: "Hunter x Hunter (2011)", score: "9.03", sub: "148 eps", img: "https://myanimelist.net" },
-        { title: "Bleach: Thousand-Year Blood War", score: "9.02", sub: "Part 3", img: "https://myanimelist.net" }
+        { title: "Frieren: Beyond Journey's End", score: "9.32", sub: "28 eps", img: "mediaimages/frieren.jpg" },
+        { title: "Fullmetal Alchemist: Brotherhood", score: "9.09", sub: "64 eps", img: "mediaimages/fmab.jpg" },
+        { title: "Steins;Gate", score: "9.07", sub: "24 eps", img: "mediaimages/steinsgate.jpg" },
+        { title: "Attack on Titan", score: "8.95", sub: "Final Season", img: "mediaimages/aot.jpg" },
+        { title: "Hunter x Hunter (2011)", score: "9.03", sub: "148 eps", img: "mediaimages/hxh.jpg" },
+        { title: "Bleach: TYBW", score: "9.02", sub: "Part 3", img: "mediaimages/bleach.jpg" }
     ],
     manga: [
-        { title: "Berserk", score: "9.47", sub: "375+ ch", img: "https://myanimelist.net" },
-        { title: "JoJo Part 7: Steel Ball Run", score: "9.30", sub: "95 ch", img: "https://myanimelist.net" },
-        { title: "Vagabond", score: "9.25", sub: "327 ch", img: "https://myanimelist.net" },
-        { title: "One Piece", score: "9.22", sub: "1100+ ch", img: "https://myanimelist.net" },
-        { title: "Monster", score: "9.15", sub: "162 ch", img: "https://myanimelist.net" },
-        { title: "Vinland Saga", score: "9.06", sub: "210+ ch", img: "https://myanimelist.net" }
+        { title: "Berserk", score: "9.47", sub: "375+ ch", img: "mediaimages/berserk.jpg" },
+        { title: "JoJo Part 7: Steel Ball Run", score: "9.30", sub: "95 ch", img: "mediaimages/sbr.jpg" },
+        { title: "Vagabond", score: "9.25", sub: "327 ch", img: "mediaimages/vagabond.jpg" },
+        { title: "One Piece", score: "9.22", sub: "1100+ ch", img: "mediaimages/onepiece.jpg" },
+        { title: "Monster", score: "9.15", sub: "162 ch", img: "mediaimages/monster.jpg" },
+        { title: "Vinland Saga", score: "9.06", sub: "210+ ch", img: "mediaimages/vinlandsaga.jpg" }
     ]
 };
 
