@@ -90,31 +90,52 @@
             </div>
 
             <div id="games-section" class="tab-content" style="display: none;">
-                <div class="section-header">
-                    <h2><span class="accent-bar"></span>Library</h2>
+                <div class="subpage-banner">
+                    <div>
+                        <div class="subpage-kicker">COLLECTION</div>
+                        <h2 class="subpage-title">Games Library</h2>
+                        <p class="subpage-sub" id="library-count-text">Loading full catalog...</p>
+                    </div>
+                    <div class="subpage-controls">
+                        <button class="pill-btn active" id="lib-all-btn" onclick="setFavoritesMode(false)">All Games</button>
+                        <button class="pill-btn" id="lib-fav-btn" onclick="setFavoritesMode(true)">★ Saved Favorites</button>
+                        <button class="pill-btn" onclick="launchRandomGame()">🎲 Surprise Me</button>
+                    </div>
                 </div>
                 <div class="media-grid"></div>
             </div>
 
             <div id="anime-section" class="tab-content" style="display: none;">
-                <div class="section-header">
-                    <h2><span class="accent-bar"></span>Anime</h2>
+                <div class="subpage-banner">
+                    <div>
+                        <div class="subpage-kicker">STREAMING HUB</div>
+                        <h2 class="subpage-title">Anime Portals</h2>
+                        <p class="subpage-sub">Select a source below to launch directly inside the player.</p>
+                    </div>
                 </div>
-                <div class="media-grid"></div>
+                <div class="portal-grid"></div>
             </div>
 
             <div id="manga-section" class="tab-content" style="display: none;">
-                <div class="section-header">
-                    <h2><span class="accent-bar"></span>Manga</h2>
+                <div class="subpage-banner">
+                    <div>
+                        <div class="subpage-kicker">READING VAULT</div>
+                        <h2 class="subpage-title">Manga & Comics</h2>
+                        <p class="subpage-sub">Select a reader portal below to open in this tab.</p>
+                    </div>
                 </div>
-                <div class="media-grid"></div>
+                <div class="portal-grid"></div>
             </div>
 
             <div id="video-section" class="tab-content" style="display: none;">
-                <div class="section-header">
-                    <h2><span class="accent-bar"></span>Videos</h2>
+                <div class="subpage-banner">
+                    <div>
+                        <div class="subpage-kicker">MEDIA STREAM</div>
+                        <h2 class="subpage-title">Videos & Embeds</h2>
+                        <p class="subpage-sub">Launch the built-in video player or stream channels below.</p>
+                    </div>
                 </div>
-                <div class="media-grid"></div>
+                <div class="portal-grid"></div>
             </div>
         </main>
 
@@ -129,6 +150,19 @@
 
             <div class="widget-title">Quick Launch</div>
             <div class="quick-launch-list" id="quick-launch-list"></div>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="top-media-header">
+                <div class="widget-title">Top Charts</div>
+                <div class="mini-toggle-group">
+                    <button class="mini-toggle-btn active" id="top-anime-btn" onclick="switchTopMedia('anime')">Anime</button>
+                    <button class="mini-toggle-btn" id="top-manga-btn" onclick="switchTopMedia('manga')">Manga</button>
+                </div>
+            </div>
+            <div class="top-media-list" id="top-media-list">
+                <div class="empty-note">Loading rankings...</div>
+            </div>
         </aside>
     </div>
 
