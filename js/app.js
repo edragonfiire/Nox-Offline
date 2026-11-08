@@ -408,7 +408,9 @@ function renderTopMediaList(items, type) {
     items.forEach(function(item, idx) {
         const row = document.createElement('div');
         row.className = 'top-media-item';
-        const thumbHtml = item.img ? '<img src="' + item.img + '" alt="' + item.title + '">' : '';
+        const thumbHtml = item.img
+            ? '<img src="' + item.img + '" alt="' + item.title + '" onerror="this.style.display=\'none\'">'
+            : '';
         row.innerHTML =
             '<div class="top-rank-badge">' + (idx + 1) + '</div>' +
             thumbHtml +
@@ -433,11 +435,13 @@ async function loadMediaSpotlight(type, containerId) {
     items.forEach(function(item, idx) {
         const card = document.createElement('div');
         card.className = 'anime-poster-card';
+        const initial = item.title.charAt(0).toUpperCase();
         const imgHtml = item.img
-            ? '<img src="' + item.img + '" alt="' + item.title + '" loading="lazy">'
-            : '<div style="width:100%;height:100%;background:var(--accent-gradient);opacity:0.35;"></div>';
+            ? '<img src="' + item.img + '" alt="' + item.title + '" loading="lazy" onerror="this.style.display=\'none\'">'
+            : '';
 
         card.innerHTML =
+            '<div class="poster-fallback-bg">' + initial + '</div>' +
             imgHtml +
             '<span class="anime-poster-rank">#' + (idx + 1) + '</span>' +
             '<span class="anime-poster-score">★ ' + item.score + '</span>' +
