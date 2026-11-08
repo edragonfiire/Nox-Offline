@@ -9,8 +9,11 @@ const streamsList = [
     { section: "anime-section", title: "Anime Source 1", url: "https://www.animeonsen.xyz/" },
     { section: "anime-section", title: "Anime X", url: "https://animex.one/home" },
     
-    { section: "manga-section", title: "Local Manga Reader", url: "https://comix.to/" },
-
-    
+    { section: "manga-section", title: "Comix.to", url: "https://comix.to/" },
+    { section: "manga-section", title: "MangaDot", url: "https://mangadot.net/" },
+    { section: "manga-section", title: "Atsumaru", url: "https://atsu.moe/" },
+    { section: "manga-section", title: "Chikari", url: "https://chikari.moe/" },
+    { section: "manga-section", title: "Toonkotsu", url: "https://toonkotsu.com/" },
+   
     { section: "video-section", title: "YouTube & Video Player", url: "./stream-players/video-player.html" }
 ];
