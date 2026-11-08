@@ -453,7 +453,24 @@ async function loadMediaSpotlight(type, containerId) {
     });
 }
 
+function applyLightMode(isLight) {
+    document.body.classList.toggle('light-mode', isLight);
+    localStorage.setItem('nox_light_mode', isLight ? 'true' : 'false');
+    const btn = document.getElementById('light-mode-btn');
+    if (btn) {
+        btn.innerText = isLight ? '🌙 Dark' : '☀ Light';
+        btn.classList.toggle('active', isLight);
+    }
+}
+
+function toggleLightMode() {
+    const nextState = !document.body.classList.contains('light-mode');
+    applyLightMode(nextState);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    setTheme(localStorage.getItem('nox_theme') || 'violet');
+    if (localStorage.getItem('nox_light_mode') === 'true') applyLightMode(true);
     renderHeroSelectors();
     renderHeroSlide(0);
     loadGamesGrid();
@@ -467,3 +484,4 @@ document.addEventListener('DOMContentLoaded', function() {
         loadMediaSpotlight('manga', 'manga-spotlight-grid');
     }, 1200);
 });
+
