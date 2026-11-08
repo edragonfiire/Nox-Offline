@@ -352,6 +352,35 @@ function launchRandomGame() {
     launchStreamPortal(title, url, imgSrc);
 }
 
+async function fetchTopMediaData(type) {
+    if (topMediaCache[type]) return topMediaCache[type];
+
+    try {
+        const res = await fetch('https://jikan.moe' + type + '?limit=6');
+        if (!res.ok) throw new Error('Rate limited');
+        const json = await res.json();
+        const items = (json.data || []).slice(0, 6).map(function(entry) {
+            return {
+                title: entry.title_english || entry.title,
+                score: entry.score ? entry.score.toFixed(2) : "N/A",
+                sub: type === 'anime'
+                    ? (entry.episodes ? entry.episodes + ' eps' : 'Airing')
+                    : (entry.chapters ? entry.chapters + ' ch' : 'Publishing'),
+                img: (entry.images && entry.images.jpg && entry.images.jpg.large_image_url)
+                    ? entry.images.jpg.large_image_url
+                    : ((entry.images && entry.images.jpg && entry.images.jpg.small_image_url) ? entry.images.jpg.small_image_url : "")
+            };
+        });
+        if (items.length) {
+            topMediaCache[type] = items;
+            return items;
+        }
+    } catch (e) {}
+
+    topMediaCache[type] = fallbackTopMedia[type];
+    return topMediaCache[type];
+}
+
 async function switchTopMedia(type) {
     const animeBtn = document.getElementById('top-anime-btn');
     const mangaBtn = document.getElementById('top-manga-btn');
@@ -361,33 +390,12 @@ async function switchTopMedia(type) {
     const listEl = document.getElementById('top-media-list');
     if (!listEl) return;
 
-    if (topMediaCache[type]) {
-        renderTopMediaList(topMediaCache[type], type);
-        return;
+    if (!topMediaCache[type]) {
+        listEl.innerHTML = '<div class="empty-note">Loading rankings...</div>';
     }
 
-    listEl.innerHTML = '<div class="empty-note">Loading rankings...</div>';
-
-    try {
-        const res = await fetch('https://jikan.moe' + type + '?limit=5');
-        if (!res.ok) throw new Error('API unavailable');
-        const json = await res.json();
-        const items = (json.data || []).slice(0, 5).map(function(entry) {
-            return {
-                title: entry.title_english || entry.title,
-                score: entry.score ? entry.score.toFixed(2) : "N/A",
-                sub: type === 'anime'
-                    ? (entry.episodes ? entry.episodes + ' eps' : 'Ongoing')
-                    : (entry.chapters ? entry.chapters + ' ch' : 'Ongoing'),
-                img: (entry.images && entry.images.jpg && entry.images.jpg.small_image_url) ? entry.images.jpg.small_image_url : ""
-            };
-        });
-        topMediaCache[type] = items.length ? items : fallbackTopMedia[type];
-    } catch (e) {
-        topMediaCache[type] = fallbackTopMedia[type];
-    }
-
-    renderTopMediaList(topMediaCache[type], type);
+    const items = await fetchTopMediaData(type);
+    renderTopMediaList(items.slice(0, 5), type);
 }
 
 function renderTopMediaList(items, type) {
@@ -413,83 +421,30 @@ function renderTopMediaList(items, type) {
     });
 }
 
-function reloadStreamPortal() {
-    const iframe = document.getElementById('nox-secure-iframe');
-    if (iframe && iframe.src) iframe.src = iframe.src;
-}
-
-function togglePlayerFullscreen() {
-    const layer = document.getElementById('inline-stream-layer');
-    if (!document.fullscreenElement) {
-        layer.requestFullscreen().catch(function() {});
-    } else {
-        document.exitFullscreen();
-    }
-}
-
-function loadSpotifyEmbed() {
-    const input = document.getElementById('spotify-url-input');
-    const frame = document.getElementById('spotify-embed-frame');
-    if (!input || !frame) return;
-
-    const raw = input.value.trim();
-    const match = raw.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode|show)\/([a-zA-Z0-9]+)/);
-    if (!match) return;
-
-    frame.src = 'https://spotify.com' + match[1] + '/' + match[2] + '?utm_source=generator&theme=0';
-    input.value = '';
-}
-
-const originalSwitchTab = switchTab;
-switchTab = function(sectionId, buttonElement) {
-    originalSwitchTab(sectionId, buttonElement);
-    if (!buttonElement) {
-        const navMap = {
-            'home-section': 'nav-home',
-            'games-section': 'nav-games',
-            'anime-section': 'nav-anime',
-            'manga-section': 'nav-manga',
-            'video-section': 'nav-video'
-        };
-        const targetBtn = document.getElementById(navMap[sectionId]);
-        if (targetBtn) targetBtn.classList.add('active');
-    }
-};
-
 async function loadMediaSpotlight(type, containerId) {
     const grid = document.getElementById(containerId);
     if (!grid) return;
 
-    try {
-        const res = await fetch('https://jikan.moe' + type + '?limit=6');
-        if (!res.ok) return;
-        const json = await res.json();
-        const items = (json.data || []).slice(0, 6);
+    const items = await fetchTopMediaData(type);
+    grid.innerHTML = '';
 
-        grid.innerHTML = '';
-        items.forEach(function(entry, idx) {
-            const title = entry.title_english || entry.title;
-            const score = entry.score ? entry.score.toFixed(2) : 'N/A';
-            const img = (entry.images && entry.images.jpg && entry.images.jpg.large_image_url)
-                ? entry.images.jpg.large_image_url
-                : '';
-            const sub = type === 'anime'
-                ? (entry.episodes ? entry.episodes + ' Episodes' : 'Airing')
-                : (entry.chapters ? entry.chapters + ' Chapters' : 'Publishing');
+    items.forEach(function(item, idx) {
+        const card = document.createElement('div');
+        card.className = 'anime-poster-card';
+        const imgHtml = item.img
+            ? '<img src="' + item.img + '" alt="' + item.title + '" loading="lazy">'
+            : '<div style="width:100%;height:100%;background:var(--accent-gradient);opacity:0.35;"></div>';
 
-            const card = document.createElement('div');
-            card.className = 'anime-poster-card';
-            card.innerHTML =
-                '<img src="' + img + '" alt="' + title + '" loading="lazy">' +
-                '<span class="anime-poster-rank">#' + (idx + 1) + '</span>' +
-                '<span class="anime-poster-score">★ ' + score + '</span>' +
-                '<div class="anime-poster-overlay">' +
-                    '<div class="anime-poster-title">' + title + '</div>' +
-                    '<div class="anime-poster-sub">' + sub + '</div>' +
-                '</div>';
-            grid.appendChild(card);
-        });
-    } catch (e) {}
+        card.innerHTML =
+            imgHtml +
+            '<span class="anime-poster-rank">#' + (idx + 1) + '</span>' +
+            '<span class="anime-poster-score">★ ' + item.score + '</span>' +
+            '<div class="anime-poster-overlay">' +
+                '<div class="anime-poster-title">' + item.title + '</div>' +
+                '<div class="anime-poster-sub">' + item.sub + '</div>' +
+            '</div>';
+        grid.appendChild(card);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -499,8 +454,10 @@ document.addEventListener('DOMContentLoaded', function() {
     loadStreamsGrid();
     renderHomeWidgets();
     renderRecentGames();
+
     switchTopMedia('anime');
     loadMediaSpotlight('anime', 'anime-spotlight-grid');
-    loadMediaSpotlight('manga', 'manga-spotlight-grid');
+    setTimeout(function() {
+        loadMediaSpotlight('manga', 'manga-spotlight-grid');
+    }, 1200);
 });
-
