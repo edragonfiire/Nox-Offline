@@ -796,3 +796,45 @@ transition: all 0.15s ease;
 .close-stream-btn:hover { border-color: var(--accent-purple); color: #c4b5fd; }
 .stream-frame-container { flex: 1; }
 .stream-frame-container iframe { width: 100%; height: 100%; border: none; }
+
+.spotify-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.spotify-input-row {
+    display: flex;
+    gap: 6px;
+}
+
+.spotify-input-row input {
+    flex: 1;
+    min-width: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-size: 11px;
+    padding: 7px 9px;
+    border-radius: 8px;
+}
+
+.spotify-input-row input:focus {
+    outline: none;
+    border-color: var(--accent-purple);
+}
+
+.spotify-input-row button {
+    background: var(--accent-gradient);
+    border: none;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 0 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.spotify-input-row button:hover {
+    opacity: 0.9;
+}
