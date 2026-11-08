@@ -6,7 +6,7 @@ const streamsList = [
     { section: "anime-section", title: "AniPm", url: "https://ani.pm/" },
     { section: "anime-section", title: "AniSnatch", url: "https://anisnatch.to/home" },
     { section: "anime-section", title: "Anime Heaven", url: "https://animeheaven.me/" },
-    { section: "anime-section", title: "Anime Source 1", url: "https://www.animeonsen.xyz/" },
+    { section: "anime-section", title: "Anime Onsen", url: "https://www.animeonsen.xyz/" },
     { section: "anime-section", title: "Anime X", url: "https://animex.one/home" },
     
     { section: "manga-section", title: "Comix.to", url: "https://comix.to/" },
