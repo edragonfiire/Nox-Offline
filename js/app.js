@@ -456,6 +456,42 @@ switchTab = function(sectionId, buttonElement) {
     }
 };
 
+async function loadMediaSpotlight(type, containerId) {
+    const grid = document.getElementById(containerId);
+    if (!grid) return;
+
+    try {
+        const res = await fetch('https://jikan.moe' + type + '?limit=6');
+        if (!res.ok) return;
+        const json = await res.json();
+        const items = (json.data || []).slice(0, 6);
+
+        grid.innerHTML = '';
+        items.forEach(function(entry, idx) {
+            const title = entry.title_english || entry.title;
+            const score = entry.score ? entry.score.toFixed(2) : 'N/A';
+            const img = (entry.images && entry.images.jpg && entry.images.jpg.large_image_url)
+                ? entry.images.jpg.large_image_url
+                : '';
+            const sub = type === 'anime'
+                ? (entry.episodes ? entry.episodes + ' Episodes' : 'Airing')
+                : (entry.chapters ? entry.chapters + ' Chapters' : 'Publishing');
+
+            const card = document.createElement('div');
+            card.className = 'anime-poster-card';
+            card.innerHTML =
+                '<img src="' + img + '" alt="' + title + '" loading="lazy">' +
+                '<span class="anime-poster-rank">#' + (idx + 1) + '</span>' +
+                '<span class="anime-poster-score">★ ' + score + '</span>' +
+                '<div class="anime-poster-overlay">' +
+                    '<div class="anime-poster-title">' + title + '</div>' +
+                    '<div class="anime-poster-sub">' + sub + '</div>' +
+                '</div>';
+            grid.appendChild(card);
+        });
+    } catch (e) {}
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     renderHeroSelectors();
     renderHeroSlide(0);
@@ -464,5 +500,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderHomeWidgets();
     renderRecentGames();
     switchTopMedia('anime');
+    loadMediaSpotlight('anime', 'anime-spotlight-grid');
+    loadMediaSpotlight('manga', 'manga-spotlight-grid');
 });
 
