@@ -413,6 +413,49 @@ function renderTopMediaList(items, type) {
     });
 }
 
+function reloadStreamPortal() {
+    const iframe = document.getElementById('nox-secure-iframe');
+    if (iframe && iframe.src) iframe.src = iframe.src;
+}
+
+function togglePlayerFullscreen() {
+    const layer = document.getElementById('inline-stream-layer');
+    if (!document.fullscreenElement) {
+        layer.requestFullscreen().catch(function() {});
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+function loadSpotifyEmbed() {
+    const input = document.getElementById('spotify-url-input');
+    const frame = document.getElementById('spotify-embed-frame');
+    if (!input || !frame) return;
+
+    const raw = input.value.trim();
+    const match = raw.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode|show)\/([a-zA-Z0-9]+)/);
+    if (!match) return;
+
+    frame.src = 'https://spotify.com' + match[1] + '/' + match[2] + '?utm_source=generator&theme=0';
+    input.value = '';
+}
+
+const originalSwitchTab = switchTab;
+switchTab = function(sectionId, buttonElement) {
+    originalSwitchTab(sectionId, buttonElement);
+    if (!buttonElement) {
+        const navMap = {
+            'home-section': 'nav-home',
+            'games-section': 'nav-games',
+            'anime-section': 'nav-anime',
+            'manga-section': 'nav-manga',
+            'video-section': 'nav-video'
+        };
+        const targetBtn = document.getElementById(navMap[sectionId]);
+        if (targetBtn) targetBtn.classList.add('active');
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     renderHeroSelectors();
     renderHeroSlide(0);
@@ -422,3 +465,4 @@ document.addEventListener('DOMContentLoaded', function() {
     renderRecentGames();
     switchTopMedia('anime');
 });
+
