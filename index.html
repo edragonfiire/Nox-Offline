@@ -49,8 +49,15 @@
 
         <main class="main-stage">
             <header class="top-search-bar">
-                <input type="text" id="global-search" placeholder="Search..." onkeyup="handleGlobalSearch(this.value)" class="search-input">
+                <input type="text" id="global-search" placeholder="Search 830+ titles... (or press /)" onkeyup="handleGlobalSearch(this.value)" class="search-input">
                 <button class="pill-btn" id="fav-filter-btn" onclick="toggleFavoritesFilter()">★ Favorites</button>
+                <button class="pill-btn" id="light-mode-btn" onclick="toggleLightMode()">☀ Light</button>
+                <div class="theme-switcher" title="Switch Accent">
+                    <button class="theme-dot active" style="background: #8b5cf6;" onclick="setTheme('violet', this)"></button>
+                    <button class="theme-dot" style="background: #06b6d4;" onclick="setTheme('cyan', this)"></button>
+                    <button class="theme-dot" style="background: #10b981;" onclick="setTheme('emerald', this)"></button>
+                    <button class="theme-dot" style="background: #f43f5e;" onclick="setTheme('crimson', this)"></button>
+                </div>
             </header>
 
             <div id="home-section" class="tab-content">
