@@ -51,13 +51,32 @@ const quickLaunchData = [
     { title: "Slope 1", href: "gamefiles/Slope 1.html", img: "gameimages/slope1.png", tag: "Arcade" }
 ];
 
+const topMediaCache = { anime: null, manga: null };
+
+const fallbackTopMedia = {
+    anime: [
+        { title: "Frieren: Beyond Journey's End", score: "9.32", sub: "28 eps", img: "" },
+        { title: "Fullmetal Alchemist: Brotherhood", score: "9.09", sub: "64 eps", img: "" },
+        { title: "Steins;Gate", score: "9.07", sub: "24 eps", img: "" },
+        { title: "Attack on Titan", score: "8.95", sub: "Final Season", img: "" },
+        { title: "Hunter x Hunter (2011)", score: "9.03", sub: "148 eps", img: "" }
+    ],
+    manga: [
+        { title: "Berserk", score: "9.47", sub: "375+ ch", img: "" },
+        { title: "JoJo Part 7: Steel Ball Run", score: "9.30", sub: "95 ch", img: "" },
+        { title: "Vagabond", score: "9.25", sub: "327 ch", img: "" },
+        { title: "One Piece", score: "9.22", sub: "1100+ ch", img: "" },
+        { title: "Monster", score: "9.15", sub: "162 ch", img: "" }
+    ]
+};
+
 function renderHeroSlide(index) {
     currentHeroIndex = (index + heroSlides.length) % heroSlides.length;
     const slide = heroSlides[currentHeroIndex];
 
     const banner = document.getElementById('hero-banner');
     if (banner) {
-        banner.style.backgroundImage = `linear-gradient(to right, rgba(11, 11, 16, 0.95) 36%, rgba(11, 11, 16, 0.25)), url('${slide.img}')`;
+        banner.style.backgroundImage = `linear-gradient(to right, rgba(12, 16, 26, 0.96) 36%, rgba(19, 25, 43, 0.35)), url('${slide.img}')`;
     }
     const tagsEl = document.getElementById('hero-tags');
     if (tagsEl) {
@@ -97,7 +116,7 @@ function renderHeroSelectors() {
             <img src="${slide.img}" alt="${slide.title}">
             <div>
                 <div class="hero-thumb-title">${slide.title}</div>
-                <div class="hero-thumb-sub">${slide.tags[0]}</div>
+                <div class="hero-thumb-sub">${slide.tags}</div>
             </div>
         `;
         card.addEventListener('click', () => renderHeroSlide(i));
@@ -218,60 +237,81 @@ function loadGamesGrid() {
     const totalCount = gridContainer.querySelectorAll('.game-link').length;
     if (countBadge && totalCount > 0) countBadge.innerText = totalCount;
 
-    gridContainer.addEventListener('click', function(e) {
-        if (e.target.closest('.gams-star')) return;
-        const link = e.target.closest('.game-link');
-        if (!link) return;
+    const libText = document.getElementById('library-count-text');
+    if (libText && totalCount > 0) libText.innerText = `Showing ${totalCount} playable titles`;
 
-        e.preventDefault();
-        const title = link.querySelector('div').innerText;
-        const url = link.getAttribute('href');
-        const imgEl = link.querySelector('img');
-        const imgSrc = imgEl ? imgEl.getAttribute('src') : '';
-        launchStreamPortal(title, url, imgSrc);
-    });
+gridContainer.addEventListener('click', function(e) {
+if (e.target.closest('.gams-star')) return;
+const link = e.target.closest('.game-link');
+if (!link) return;
+e.preventDefault();
+const title = link.querySelector('div').innerText;
+const url = link.getAttribute('href');
+const imgEl = link.querySelector('img');
+const imgSrc = imgEl ? imgEl.getAttribute('src') : '';
+launchStreamPortal(title, url, imgSrc);
+});
 }
-
 function loadStreamsGrid() {
-    if (typeof streamsList === 'undefined') return;
-
-    streamsList.forEach(item => {
-        const container = document.querySelector(`#${item.section} .media-grid`);
-        if (!container) return;
-
-        const card = document.createElement('div');
-        card.className = 'media-card';
-        card.innerHTML = `<h5>${item.title}</h5>`;
-        card.addEventListener('click', () => launchStreamPortal(item.title, item.url));
-        container.appendChild(card);
-    });
+if (typeof streamsList === 'undefined') return;
+const defaultMeta = {
+"anime-section": { tag: "ANIME", desc: "Stream episodes directly inside your active browser tab." },
+"manga-section": { tag: "MANGA", desc: "Read chapters and series inside your active browser tab." },
+"video-section": { tag: "PLAYER", desc: "Watch embeds or load local video files seamlessly." }
+};
+streamsList.forEach(item => {
+const container = document.querySelector(#${item.section} .portal-grid);
+if (!container) return;
+const meta = defaultMeta[item.section] || { tag: "PORTAL", desc: "Open directly inside Nox." };
+const tag = item.tag || meta.tag;
+const desc = item.desc || meta.desc;
+const initial = item.title.charAt(0).toUpperCase();
+const card = document.createElement('div');
+card.className = 'portal-card';
+card.innerHTML = <div class="portal-card-top"> <div class="portal-icon-box">${initial}</div> <span class="portal-tag">${tag}</span> </div> <div class="portal-card-title">${item.title}</div> <div class="portal-card-desc">${desc}</div> <div class="portal-card-footer"> <span>Launch Portal</span> <span>→</span> </div>;
+card.addEventListener('click', () => launchStreamPortal(item.title, item.url));
+container.appendChild(card);
+});
 }
-
 function handleGlobalSearch(query) {
-    const gamesTab = document.getElementById('games-section');
+const gamesTab = document.getElementById('games-section');
 if (query.trim().length > 0 && gamesTab.style.display === 'none') {
 switchTab('games-section', document.getElementById('nav-games'));
 }
 applyGameFilters();
 }
+function setFavoritesMode(favState) {
+showOnlyFavorites = favState;
+document.getElementById('fav-filter-btn')?.classList.toggle('active', showOnlyFavorites);
+document.getElementById('lib-fav-btn')?.classList.toggle('active', showOnlyFavorites);
+document.getElementById('lib-all-btn')?.classList.toggle('active', !showOnlyFavorites);
+applyGameFilters();
+}
 function toggleFavoritesFilter() {
-showOnlyFavorites = !showOnlyFavorites;
-const btn = document.getElementById('fav-filter-btn');
-if (btn) btn.classList.toggle('active', showOnlyFavorites);
+const nextState = !showOnlyFavorites;
 const gamesTab = document.getElementById('games-section');
-if (showOnlyFavorites && gamesTab.style.display === 'none') {
+if (nextState && gamesTab.style.display === 'none') {
 switchTab('games-section', document.getElementById('nav-games'));
 }
-applyGameFilters();
+setFavoritesMode(nextState);
 }
 function applyGameFilters() {
 const query = (document.getElementById('global-search')?.value || '').toLowerCase();
+let visibleCount = 0;
 document.querySelectorAll('#games-section .game-link').forEach(card => {
 const title = card.querySelector('div').innerText.toLowerCase();
 const matchesSearch = title.includes(query);
 const matchesFav = !showOnlyFavorites || card.classList.contains('is-bookmarked');
-card.style.display = (matchesSearch && matchesFav) ? 'flex' : 'none';
+const isVisible = matchesSearch && matchesFav;
+card.style.display = isVisible ? 'flex' : 'none';
+if (isVisible) visibleCount++;
 });
+const libText = document.getElementById('library-count-text');
+if (libText) {
+libText.innerText = showOnlyFavorites
+? Showing ${visibleCount} saved favorite${visibleCount === 1 ? '' : 's'}
+: Showing ${visibleCount} playable titles;
+}
 }
 function launchRandomGame() {
 const links = Array.from(document.querySelectorAll('#games-section .game-link'))
@@ -283,6 +323,49 @@ const url = pick.getAttribute('href');
 const imgSrc = pick.querySelector('img')?.getAttribute('src') || '';
 launchStreamPortal(title, url, imgSrc);
 }
+async function switchTopMedia(type) {
+document.getElementById('top-anime-btn')?.classList.toggle('active', type === 'anime');
+document.getElementById('top-manga-btn')?.classList.toggle('active', type === 'manga');
+const listEl = document.getElementById('top-media-list');
+if (!listEl) return;
+if (topMediaCache[type]) {
+renderTopMediaList(topMediaCache[type], type);
+return;
+}
+listEl.innerHTML = 'Loading rankings...';
+try {
+const res = await fetch(https://jikan.moe{type}?limit=5);
+if (!res.ok) throw new Error('API unavailable');
+const json = await res.json();
+const items = (json.data || []).slice(0, 5).map(entry => ({
+title: entry.title_english || entry.title,
+score: entry.score ? entry.score.toFixed(2) : "N/A",
+sub: type === 'anime'
+? (entry.episodes ? ${entry.episodes} eps : 'Ongoing')
+: (entry.chapters ? ${entry.chapters} ch : 'Ongoing'),
+img: entry.images?.jpg?.small_image_url || ""
+}));
+topMediaCache[type] = items.length ? items : fallbackTopMedia[type];
+} catch {
+topMediaCache[type] = fallbackTopMedia[type];
+}
+renderTopMediaList(topMediaCache[type], type);
+}
+function renderTopMediaList(items, type) {
+const listEl = document.getElementById('top-media-list');
+if (!listEl) return;
+listEl.innerHTML = '';
+items.forEach((item, idx) => {
+const row = document.createElement('div');
+row.className = 'top-media-item';
+const thumbHtml = item.img ? <img src="${item.img}" alt="${item.title}"> : '';
+row.innerHTML = <div class="top-rank-badge">${idx + 1}</div> ${thumbHtml} <div class="top-media-info"> <div class="top-media-title" title="${item.title}">${item.title}</div> <div class="top-media-meta">★ ${item.score}  •  ${item.sub}</div> </div>;
+row.addEventListener('click', () => {
+switchTab(type === 'anime' ? 'anime-section' : 'manga-section', null);
+});
+listEl.appendChild(row);
+});
+}
 document.addEventListener('DOMContentLoaded', () => {
 renderHeroSelectors();
 renderHeroSlide(0);
@@ -290,4 +373,5 @@ loadGamesGrid();
 loadStreamsGrid();
 renderHomeWidgets();
 renderRecentGames();
+switchTopMedia('anime');
 });
