@@ -76,11 +76,11 @@ function renderHeroSlide(index) {
 
     const banner = document.getElementById('hero-banner');
     if (banner) {
-        banner.style.backgroundImage = `linear-gradient(to right, rgba(12, 16, 26, 0.96) 36%, rgba(19, 25, 43, 0.35)), url('${slide.img}')`;
+        banner.style.backgroundImage = "linear-gradient(to right, rgba(12, 16, 26, 0.96) 36%, rgba(19, 25, 43, 0.35)), url('" + slide.img + "')";
     }
     const tagsEl = document.getElementById('hero-tags');
     if (tagsEl) {
-        tagsEl.innerHTML = slide.tags.map(t => `<span>${t}</span>`).join('');
+        tagsEl.innerHTML = slide.tags.map(function(t) { return "<span>" + t + "</span>"; }).join('');
     }
     const titleEl = document.getElementById('hero-title');
     if (titleEl) titleEl.innerText = slide.title;
@@ -93,10 +93,10 @@ function renderHeroSlide(index) {
 
     const playBtn = document.getElementById('hero-play-btn');
     if (playBtn) {
-        playBtn.onclick = () => launchStreamPortal(slide.title, slide.href, slide.img);
+        playBtn.onclick = function() { launchStreamPortal(slide.title, slide.href, slide.img); };
     }
 
-    document.querySelectorAll('.hero-thumb-card').forEach((card, i) => {
+    document.querySelectorAll('.hero-thumb-card').forEach(function(card, i) {
         card.classList.toggle('active', i === currentHeroIndex);
     });
 }
@@ -109,30 +109,29 @@ function renderHeroSelectors() {
     const row = document.getElementById('hero-selector-row');
     if (!row) return;
     row.innerHTML = '';
-    heroSlides.forEach((slide, i) => {
+    heroSlides.forEach(function(slide, i) {
         const card = document.createElement('div');
         card.className = 'hero-thumb-card' + (i === 0 ? ' active' : '');
-        card.innerHTML = `
-            <img src="${slide.img}" alt="${slide.title}">
-            <div>
-                <div class="hero-thumb-title">${slide.title}</div>
-                <div class="hero-thumb-sub">${slide.tags}</div>
-            </div>
-        `;
-        card.addEventListener('click', () => renderHeroSlide(i));
+        card.innerHTML =
+            '<img src="' + slide.img + '" alt="' + slide.title + '">' +
+            '<div>' +
+                '<div class="hero-thumb-title">' + slide.title + '</div>' +
+                '<div class="hero-thumb-sub">' + slide.tags + '</div>' +
+            '</div>';
+        card.addEventListener('click', function() { renderHeroSlide(i); });
         row.appendChild(card);
     });
 }
 
 function switchTab(sectionId, buttonElement) {
     closeStreamPortal();
-    document.querySelectorAll('.tab-content').forEach(panel => {
+    document.querySelectorAll('.tab-content').forEach(function(panel) {
         panel.style.display = 'none';
     });
     const targetSection = document.getElementById(sectionId);
     if (targetSection) targetSection.style.display = 'block';
 
-    document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+    document.querySelectorAll('.nav-tab-btn').forEach(function(btn) {
         btn.classList.remove('active');
     });
     if (buttonElement) {
@@ -140,14 +139,14 @@ function switchTab(sectionId, buttonElement) {
     }
 }
 
-function launchStreamPortal(name, hostUrl, imgSrc = "") {
+function launchStreamPortal(name, hostUrl, imgSrc) {
     if (!hostUrl || hostUrl === 'URL_HERE') return;
     document.getElementById('active-stream-title').innerText = name;
     document.getElementById('nox-secure-iframe').src = hostUrl;
     document.getElementById('inline-stream-layer').style.display = "flex";
 
-    if (hostUrl.startsWith('gamefiles/')) {
-        saveRecentGame(name, hostUrl, imgSrc);
+    if (hostUrl.indexOf('gamefiles/') === 0) {
+        saveRecentGame(name, hostUrl, imgSrc || "");
     }
 }
 
@@ -159,8 +158,8 @@ function closeStreamPortal() {
 
 function saveRecentGame(title, href, img) {
     let recent = JSON.parse(localStorage.getItem('nox_recent_games')) || [];
-    recent = recent.filter(item => item.title !== title);
-    recent.unshift({ title, href, img: img || 'gameimages/minecraft.webp' });
+    recent = recent.filter(function(item) { return item.title !== title; });
+    recent.unshift({ title: title, href: href, img: img || 'gameimages/minecraft.webp' });
     recent = recent.slice(0, 4);
     localStorage.setItem('nox_recent_games', JSON.stringify(recent));
     renderRecentGames();
@@ -173,37 +172,36 @@ function renderRecentGames() {
     if (!recent.length) return;
 
     list.innerHTML = '';
-    recent.forEach(item => {
+    recent.forEach(function(item) {
         const row = document.createElement('div');
         row.className = 'recent-item';
-        row.innerHTML = `
-            <img src="${item.img}" alt="${item.title}">
-            <div>
-                <div class="recent-item-title">${item.title}</div>
-                <div class="recent-item-sub">Resume</div>
-            </div>
-        `;
-        row.addEventListener('click', () => launchStreamPortal(item.title, item.href, item.img));
+        row.innerHTML =
+            '<img src="' + item.img + '" alt="' + item.title + '">' +
+            '<div>' +
+                '<div class="recent-item-title">' + item.title + '</div>' +
+                '<div class="recent-item-sub">Resume</div>' +
+            '</div>';
+        row.addEventListener('click', function() { launchStreamPortal(item.title, item.href, item.img); });
         list.appendChild(row);
     });
 }
+
 
 function renderHomeWidgets() {
     const featuredRow = document.getElementById('featured-games-row');
     if (featuredRow) {
         featuredRow.innerHTML = '';
-        featuredGamesData.forEach(g => {
+        featuredGamesData.forEach(function(g) {
             const card = document.createElement('div');
             card.className = 'featured-poster';
-            card.innerHTML = `
-                <img src="${g.img}" alt="${g.title}">
-                <span class="featured-badge">${g.badge}</span>
-                <div class="featured-poster-overlay">
-                    <div class="featured-poster-title">${g.title}</div>
-                    <div class="featured-poster-genre">${g.genre}</div>
-                </div>
-            `;
-            card.addEventListener('click', () => launchStreamPortal(g.title, g.href, g.img));
+            card.innerHTML =
+                '<img src="' + g.img + '" alt="' + g.title + '">' +
+                '<span class="featured-badge">' + g.badge + '</span>' +
+                '<div class="featured-poster-overlay">' +
+                    '<div class="featured-poster-title">' + g.title + '</div>' +
+                    '<div class="featured-poster-genre">' + g.genre + '</div>' +
+                '</div>';
+            card.addEventListener('click', function() { launchStreamPortal(g.title, g.href, g.img); });
             featuredRow.appendChild(card);
         });
     }
@@ -211,17 +209,16 @@ function renderHomeWidgets() {
     const quickList = document.getElementById('quick-launch-list');
     if (quickList) {
         quickList.innerHTML = '';
-        quickLaunchData.forEach(q => {
+        quickLaunchData.forEach(function(q) {
             const item = document.createElement('div');
             item.className = 'quick-item';
-            item.innerHTML = `
-                <img src="${q.img}" alt="${q.title}">
-                <div>
-                    <div class="quick-item-title">${q.title}</div>
-                    <div class="quick-item-status">${q.tag}</div>
-                </div>
-            `;
-            item.addEventListener('click', () => launchStreamPortal(q.title, q.href, q.img));
+            item.innerHTML =
+                '<img src="' + q.img + '" alt="' + q.title + '">' +
+                '<div>' +
+                    '<div class="quick-item-title">' + q.title + '</div>' +
+                    '<div class="quick-item-status">' + q.tag + '</div>' +
+                '</div>';
+            item.addEventListener('click', function() { launchStreamPortal(q.title, q.href, q.img); });
             quickList.appendChild(item);
         });
     }
@@ -238,140 +235,190 @@ function loadGamesGrid() {
     if (countBadge && totalCount > 0) countBadge.innerText = totalCount;
 
     const libText = document.getElementById('library-count-text');
-    if (libText && totalCount > 0) libText.innerText = `Showing ${totalCount} playable titles`;
+    if (libText && totalCount > 0) libText.innerText = 'Showing ' + totalCount + ' playable titles';
 
-gridContainer.addEventListener('click', function(e) {
-if (e.target.closest('.gams-star')) return;
-const link = e.target.closest('.game-link');
-if (!link) return;
-e.preventDefault();
-const title = link.querySelector('div').innerText;
-const url = link.getAttribute('href');
-const imgEl = link.querySelector('img');
-const imgSrc = imgEl ? imgEl.getAttribute('src') : '';
-launchStreamPortal(title, url, imgSrc);
-});
+    gridContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.gams-star')) return;
+        const link = e.target.closest('.game-link');
+        if (!link) return;
+
+        e.preventDefault();
+        const title = link.querySelector('div').innerText;
+        const url = link.getAttribute('href');
+        const imgEl = link.querySelector('img');
+        const imgSrc = imgEl ? imgEl.getAttribute('src') : '';
+        launchStreamPortal(title, url, imgSrc);
+    });
 }
+
 function loadStreamsGrid() {
-if (typeof streamsList === 'undefined') return;
-const defaultMeta = {
-"anime-section": { tag: "ANIME", desc: "Stream episodes directly inside your active browser tab." },
-"manga-section": { tag: "MANGA", desc: "Read chapters and series inside your active browser tab." },
-"video-section": { tag: "PLAYER", desc: "Watch embeds or load local video files seamlessly." }
-};
-streamsList.forEach(item => {
-const container = document.querySelector(#${item.section} .portal-grid);
-if (!container) return;
-const meta = defaultMeta[item.section] || { tag: "PORTAL", desc: "Open directly inside Nox." };
-const tag = item.tag || meta.tag;
-const desc = item.desc || meta.desc;
-const initial = item.title.charAt(0).toUpperCase();
-const card = document.createElement('div');
-card.className = 'portal-card';
-card.innerHTML = <div class="portal-card-top"> <div class="portal-icon-box">${initial}</div> <span class="portal-tag">${tag}</span> </div> <div class="portal-card-title">${item.title}</div> <div class="portal-card-desc">${desc}</div> <div class="portal-card-footer"> <span>Launch Portal</span> <span>→</span> </div>;
-card.addEventListener('click', () => launchStreamPortal(item.title, item.url));
-container.appendChild(card);
-});
+    if (typeof streamsList === 'undefined') return;
+
+    const defaultMeta = {
+        "anime-section": { tag: "ANIME", desc: "Stream episodes directly inside your active browser tab." },
+        "manga-section": { tag: "MANGA", desc: "Read chapters and series inside your active browser tab." },
+        "video-section": { tag: "PLAYER", desc: "Watch embeds or load local video files seamlessly." }
+    };
+
+    streamsList.forEach(function(item) {
+        const container = document.querySelector('#' + item.section + ' .portal-grid');
+        if (!container) return;
+
+        const meta = defaultMeta[item.section] || { tag: "PORTAL", desc: "Open directly inside Nox." };
+        const tag = item.tag || meta.tag;
+        const desc = item.desc || meta.desc;
+        const initial = item.title.charAt(0).toUpperCase();
+
+        const card = document.createElement('div');
+        card.className = 'portal-card';
+        card.innerHTML =
+            '<div class="portal-card-top">' +
+                '<div class="portal-icon-box">' + initial + '</div>' +
+                '<span class="portal-tag">' + tag + '</span>' +
+            '</div>' +
+            '<div class="portal-card-title">' + item.title + '</div>' +
+            '<div class="portal-card-desc">' + desc + '</div>' +
+            '<div class="portal-card-footer">' +
+                '<span>Launch Portal</span>' +
+                '<span>→</span>' +
+            '</div>';
+        card.addEventListener('click', function() { launchStreamPortal(item.title, item.url); });
+        container.appendChild(card);
+    });
 }
+
 function handleGlobalSearch(query) {
-const gamesTab = document.getElementById('games-section');
-if (query.trim().length > 0 && gamesTab.style.display === 'none') {
-switchTab('games-section', document.getElementById('nav-games'));
+    const gamesTab = document.getElementById('games-section');
+    if (query.trim().length > 0 && gamesTab.style.display === 'none') {
+        switchTab('games-section', document.getElementById('nav-games'));
+    }
+    applyGameFilters();
 }
-applyGameFilters();
-}
+
 function setFavoritesMode(favState) {
-showOnlyFavorites = favState;
-document.getElementById('fav-filter-btn')?.classList.toggle('active', showOnlyFavorites);
-document.getElementById('lib-fav-btn')?.classList.toggle('active', showOnlyFavorites);
-document.getElementById('lib-all-btn')?.classList.toggle('active', !showOnlyFavorites);
-applyGameFilters();
+    showOnlyFavorites = favState;
+    const favBtn = document.getElementById('fav-filter-btn');
+    const libFavBtn = document.getElementById('lib-fav-btn');
+    const libAllBtn = document.getElementById('lib-all-btn');
+    if (favBtn) favBtn.classList.toggle('active', showOnlyFavorites);
+    if (libFavBtn) libFavBtn.classList.toggle('active', showOnlyFavorites);
+    if (libAllBtn) libAllBtn.classList.toggle('active', !showOnlyFavorites);
+    applyGameFilters();
 }
+
 function toggleFavoritesFilter() {
-const nextState = !showOnlyFavorites;
-const gamesTab = document.getElementById('games-section');
-if (nextState && gamesTab.style.display === 'none') {
-switchTab('games-section', document.getElementById('nav-games'));
+    const nextState = !showOnlyFavorites;
+    const gamesTab = document.getElementById('games-section');
+    if (nextState && gamesTab.style.display === 'none') {
+        switchTab('games-section', document.getElementById('nav-games'));
+    }
+    setFavoritesMode(nextState);
 }
-setFavoritesMode(nextState);
-}
+
 function applyGameFilters() {
-const query = (document.getElementById('global-search')?.value || '').toLowerCase();
-let visibleCount = 0;
-document.querySelectorAll('#games-section .game-link').forEach(card => {
-const title = card.querySelector('div').innerText.toLowerCase();
-const matchesSearch = title.includes(query);
-const matchesFav = !showOnlyFavorites || card.classList.contains('is-bookmarked');
-const isVisible = matchesSearch && matchesFav;
-card.style.display = isVisible ? 'flex' : 'none';
-if (isVisible) visibleCount++;
-});
-const libText = document.getElementById('library-count-text');
-if (libText) {
-libText.innerText = showOnlyFavorites
-? Showing ${visibleCount} saved favorite${visibleCount === 1 ? '' : 's'}
-: Showing ${visibleCount} playable titles;
+    const searchEl = document.getElementById('global-search');
+    const query = (searchEl ? searchEl.value : '').toLowerCase();
+    let visibleCount = 0;
+
+    document.querySelectorAll('#games-section .game-link').forEach(function(card) {
+        const title = card.querySelector('div').innerText.toLowerCase();
+        const matchesSearch = title.indexOf(query) !== -1;
+        const matchesFav = !showOnlyFavorites || card.classList.contains('is-bookmarked');
+        const isVisible = matchesSearch && matchesFav;
+        card.style.display = isVisible ? 'flex' : 'none';
+        if (isVisible) visibleCount++;
+    });
+
+    const libText = document.getElementById('library-count-text');
+    if (libText) {
+        libText.innerText = showOnlyFavorites
+            ? 'Showing ' + visibleCount + ' saved favorite' + (visibleCount === 1 ? '' : 's')
+            : 'Showing ' + visibleCount + ' playable titles';
+    }
 }
-}
+
 function launchRandomGame() {
-const links = Array.from(document.querySelectorAll('#games-section .game-link'))
-.filter(a => a.getAttribute('href')?.startsWith('gamefiles/'));
-if (!links.length) return;
-const pick = links[Math.floor(Math.random() * links.length)];
-const title = pick.querySelector('div').innerText;
-const url = pick.getAttribute('href');
-const imgSrc = pick.querySelector('img')?.getAttribute('src') || '';
-launchStreamPortal(title, url, imgSrc);
+    const links = Array.from(document.querySelectorAll('#games-section .game-link'))
+        .filter(function(a) {
+            const href = a.getAttribute('href') || '';
+            return href.indexOf('gamefiles/') === 0;
+        });
+    if (!links.length) return;
+    const pick = links[Math.floor(Math.random() * links.length)];
+    const title = pick.querySelector('div').innerText;
+    const url = pick.getAttribute('href');
+    const imgEl = pick.querySelector('img');
+    const imgSrc = imgEl ? imgEl.getAttribute('src') : '';
+    launchStreamPortal(title, url, imgSrc);
 }
+
 async function switchTopMedia(type) {
-document.getElementById('top-anime-btn')?.classList.toggle('active', type === 'anime');
-document.getElementById('top-manga-btn')?.classList.toggle('active', type === 'manga');
-const listEl = document.getElementById('top-media-list');
-if (!listEl) return;
-if (topMediaCache[type]) {
-renderTopMediaList(topMediaCache[type], type);
-return;
+    const animeBtn = document.getElementById('top-anime-btn');
+    const mangaBtn = document.getElementById('top-manga-btn');
+    if (animeBtn) animeBtn.classList.toggle('active', type === 'anime');
+    if (mangaBtn) mangaBtn.classList.toggle('active', type === 'manga');
+
+    const listEl = document.getElementById('top-media-list');
+    if (!listEl) return;
+
+    if (topMediaCache[type]) {
+        renderTopMediaList(topMediaCache[type], type);
+        return;
+    }
+
+    listEl.innerHTML = '<div class="empty-note">Loading rankings...</div>';
+
+    try {
+        const res = await fetch('https://jikan.moe' + type + '?limit=5');
+        if (!res.ok) throw new Error('API unavailable');
+        const json = await res.json();
+        const items = (json.data || []).slice(0, 5).map(function(entry) {
+            return {
+                title: entry.title_english || entry.title,
+                score: entry.score ? entry.score.toFixed(2) : "N/A",
+                sub: type === 'anime'
+                    ? (entry.episodes ? entry.episodes + ' eps' : 'Ongoing')
+                    : (entry.chapters ? entry.chapters + ' ch' : 'Ongoing'),
+                img: (entry.images && entry.images.jpg && entry.images.jpg.small_image_url) ? entry.images.jpg.small_image_url : ""
+            };
+        });
+        topMediaCache[type] = items.length ? items : fallbackTopMedia[type];
+    } catch (e) {
+        topMediaCache[type] = fallbackTopMedia[type];
+    }
+
+    renderTopMediaList(topMediaCache[type], type);
 }
-listEl.innerHTML = 'Loading rankings...';
-try {
-const res = await fetch(https://jikan.moe{type}?limit=5);
-if (!res.ok) throw new Error('API unavailable');
-const json = await res.json();
-const items = (json.data || []).slice(0, 5).map(entry => ({
-title: entry.title_english || entry.title,
-score: entry.score ? entry.score.toFixed(2) : "N/A",
-sub: type === 'anime'
-? (entry.episodes ? ${entry.episodes} eps : 'Ongoing')
-: (entry.chapters ? ${entry.chapters} ch : 'Ongoing'),
-img: entry.images?.jpg?.small_image_url || ""
-}));
-topMediaCache[type] = items.length ? items : fallbackTopMedia[type];
-} catch {
-topMediaCache[type] = fallbackTopMedia[type];
-}
-renderTopMediaList(topMediaCache[type], type);
-}
+
 function renderTopMediaList(items, type) {
-const listEl = document.getElementById('top-media-list');
-if (!listEl) return;
-listEl.innerHTML = '';
-items.forEach((item, idx) => {
-const row = document.createElement('div');
-row.className = 'top-media-item';
-const thumbHtml = item.img ? <img src="${item.img}" alt="${item.title}"> : '';
-row.innerHTML = <div class="top-rank-badge">${idx + 1}</div> ${thumbHtml} <div class="top-media-info"> <div class="top-media-title" title="${item.title}">${item.title}</div> <div class="top-media-meta">★ ${item.score}  •  ${item.sub}</div> </div>;
-row.addEventListener('click', () => {
-switchTab(type === 'anime' ? 'anime-section' : 'manga-section', null);
-});
-listEl.appendChild(row);
-});
+    const listEl = document.getElementById('top-media-list');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+
+    items.forEach(function(item, idx) {
+        const row = document.createElement('div');
+        row.className = 'top-media-item';
+        const thumbHtml = item.img ? '<img src="' + item.img + '" alt="' + item.title + '">' : '';
+        row.innerHTML =
+            '<div class="top-rank-badge">' + (idx + 1) + '</div>' +
+            thumbHtml +
+            '<div class="top-media-info">' +
+                '<div class="top-media-title" title="' + item.title + '">' + item.title + '</div>' +
+                '<div class="top-media-meta">★ ' + item.score + '  •  ' + item.sub + '</div>' +
+            '</div>';
+        row.addEventListener('click', function() {
+            switchTab(type === 'anime' ? 'anime-section' : 'manga-section', null);
+        });
+        listEl.appendChild(row);
+    });
 }
-document.addEventListener('DOMContentLoaded', () => {
-renderHeroSelectors();
-renderHeroSlide(0);
-loadGamesGrid();
-loadStreamsGrid();
-renderHomeWidgets();
-renderRecentGames();
-switchTopMedia('anime');
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderHeroSelectors();
+    renderHeroSlide(0);
+    loadGamesGrid();
+    loadStreamsGrid();
+    renderHomeWidgets();
+    renderRecentGames();
+    switchTopMedia('anime');
 });
