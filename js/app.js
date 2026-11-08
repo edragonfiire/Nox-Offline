@@ -118,7 +118,7 @@ function renderHeroSelectors() {
             '<img src="' + slide.img + '" alt="' + slide.title + '">' +
             '<div>' +
                 '<div class="hero-thumb-title">' + slide.title + '</div>' +
-                '<div class="hero-thumb-sub">' + slide.tags[0] + '</div>' +
+                '<div class="hero-thumb-sub">' + slide.tags + '</div>' +
             '</div>';
         card.addEventListener('click', function() { renderHeroSlide(i); });
         row.appendChild(card);
@@ -138,16 +138,6 @@ function switchTab(sectionId, buttonElement) {
     });
     if (buttonElement) {
         buttonElement.classList.add('active');
-    } else {
-        const navMap = {
-            'home-section': 'nav-home',
-            'games-section': 'nav-games',
-            'anime-section': 'nav-anime',
-            'manga-section': 'nav-manga',
-            'video-section': 'nav-video'
-        };
-        const targetBtn = document.getElementById(navMap[sectionId]);
-        if (targetBtn) targetBtn.classList.add('active');
     }
 }
 
@@ -168,19 +158,6 @@ function closeStreamPortal() {
     document.getElementById('inline-stream-layer').style.display = "none";
 }
 
-function reloadStreamPortal() {
-    const iframe = document.getElementById('nox-secure-iframe');
-    if (iframe && iframe.src) iframe.src = iframe.src;
-}
-
-function togglePlayerFullscreen() {
-    const layer = document.getElementById('inline-stream-layer');
-    if (!document.fullscreenElement) {
-        layer.requestFullscreen().catch(function() {});
-    } else {
-        document.exitFullscreen();
-    }
-}
 function saveRecentGame(title, href, img) {
     let recent = JSON.parse(localStorage.getItem('nox_recent_games')) || [];
     recent = recent.filter(function(item) { return item.title !== title; });
@@ -210,6 +187,7 @@ function renderRecentGames() {
         list.appendChild(row);
     });
 }
+
 
 function renderHomeWidgets() {
     const featuredRow = document.getElementById('featured-games-row');
@@ -376,150 +354,116 @@ function launchRandomGame() {
     launchStreamPortal(title, url, imgSrc);
 }
 
-function loadSpotifyEmbed() {
-    const input = document.getElementById('spotify-url-input');
-    const frame = document.getElementById('spotify-embed-frame');
-    if (!input || !frame) return;
-
-    const raw = input.value.trim();
-    const match = raw.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode|show)\/([a-zA-Z0-9]+)/);
-    if (!match) return;
-
-    frame.src = 'https://spotify.com' + match[1] + '/' + match[2] + '?utm_source=generator&theme=0';
-    input.value = '';
-}
-
-function setTheme(themeName, btnEl) {
-    document.body.setAttribute('data-theme', themeName);
-    localStorage.setItem('nox_theme', themeName);
-    document.querySelectorAll('.theme-dot').forEach(function(dot) {
-        dot.classList.remove('active');
-    });
-    if (btnEl) {
-        btnEl.classList.add('active');
-    } else {
-        const idxMap = { violet: 0, cyan: 1, emerald: 2, crimson: 3 };
-        const dots = document.querySelectorAll('.theme-dot');
-        if (dots[idxMap[themeName]]) dots[idxMap[themeName]].classList.add('active');
-    }
-}
-
-function applyLightMode(isLight) {
-    document.body.classList.toggle('light-mode', isLight);
-    localStorage.setItem('nox_light_mode', isLight ? 'true' : 'false');
-    const btn = document.getElementById('light-mode-btn');
-    if (btn) {
-        btn.innerText = isLight ? '🌙 Dark' : '☀ Light';
-        btn.classList.toggle('active', isLight);
-    }
-}
-
-function toggleLightMode() {
-    const nextState = !document.body.classList.contains('light-mode');
-    applyLightMode(nextState);
-}
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
-        e.preventDefault();
-document.getElementById('global-search')?.focus();
-}
-});
 async function fetchTopMediaData(type) {
-if (topMediaCache[type]) return topMediaCache[type];
-try {
-const res = await fetch('jikan.moe' + type + '?limit=6');
-if (!res.ok) throw new Error('Rate limited');
-const json = await res.json();
-const items = (json.data || []).slice(0, 6).map(function(entry) {
-return {
-title: entry.title_english || entry.title,
-score: entry.score ? entry.score.toFixed(2) : "N/A",
-sub: type === 'anime'
-? (entry.episodes ? entry.episodes + ' eps' : 'Airing')
-: (entry.chapters ? entry.chapters + ' ch' : 'Publishing'),
-img: (entry.images && entry.images.jpg && entry.images.jpg.large_image_url)
-? entry.images.jpg.large_image_url
-: ""
-};
-});
-if (items.length) {
-topMediaCache[type] = items;
-return items;
+    if (topMediaCache[type]) return topMediaCache[type];
+
+    try {
+        const res = await fetch('https://jikan.moe' + type + '?limit=6');
+        if (!res.ok) throw new Error('Rate limited');
+        const json = await res.json();
+        const items = (json.data || []).slice(0, 6).map(function(entry) {
+            return {
+                title: entry.title_english || entry.title,
+                score: entry.score ? entry.score.toFixed(2) : "N/A",
+                sub: type === 'anime'
+                    ? (entry.episodes ? entry.episodes + ' eps' : 'Airing')
+                    : (entry.chapters ? entry.chapters + ' ch' : 'Publishing'),
+                img: (entry.images && entry.images.jpg && entry.images.jpg.large_image_url)
+                    ? entry.images.jpg.large_image_url
+                    : ((entry.images && entry.images.jpg && entry.images.jpg.small_image_url) ? entry.images.jpg.small_image_url : "")
+            };
+        });
+        if (items.length) {
+            topMediaCache[type] = items;
+            return items;
+        }
+    } catch (e) {}
+
+    topMediaCache[type] = fallbackTopMedia[type];
+    return topMediaCache[type];
 }
-} catch (e) {}
-topMediaCache[type] = fallbackTopMedia[type];
-return topMediaCache[type];
-}
+
 async function switchTopMedia(type) {
-const animeBtn = document.getElementById('top-anime-btn');
-const mangaBtn = document.getElementById('top-manga-btn');
-if (animeBtn) animeBtn.classList.toggle('active', type === 'anime');
-if (mangaBtn) mangaBtn.classList.toggle('active', type === 'manga');
-const listEl = document.getElementById('top-media-list');
-if (!listEl) return;
-const items = await fetchTopMediaData(type);
-renderTopMediaList(items.slice(0, 5), type);
+    const animeBtn = document.getElementById('top-anime-btn');
+    const mangaBtn = document.getElementById('top-manga-btn');
+    if (animeBtn) animeBtn.classList.toggle('active', type === 'anime');
+    if (mangaBtn) mangaBtn.classList.toggle('active', type === 'manga');
+
+    const listEl = document.getElementById('top-media-list');
+    if (!listEl) return;
+
+    if (!topMediaCache[type]) {
+        listEl.innerHTML = '<div class="empty-note">Loading rankings...</div>';
+    }
+
+    const items = await fetchTopMediaData(type);
+    renderTopMediaList(items.slice(0, 5), type);
 }
+
 function renderTopMediaList(items, type) {
-const listEl = document.getElementById('top-media-list');
-if (!listEl) return;
-listEl.innerHTML = '';
-items.forEach(function(item, idx) {
-const row = document.createElement('div');
-row.className = 'top-media-item';
-const thumbHtml = item.img
-? ''
-: '';
-row.innerHTML =
-'' + (idx + 1) + '' +
-thumbHtml +
-'' +
-'' + item.title + '' +
-'★ ' + item.score + '  •  ' + item.sub + '' +
-'';
-row.addEventListener('click', function() {
-switchTab(type === 'anime' ? 'anime-section' : 'manga-section', null);
-});
-listEl.appendChild(row);
-});
+    const listEl = document.getElementById('top-media-list');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+
+    items.forEach(function(item, idx) {
+        const row = document.createElement('div');
+        row.className = 'top-media-item';
+        const thumbHtml = item.img
+            ? '<img src="' + item.img + '" alt="' + item.title + '" onerror="this.style.display=\'none\'">'
+            : '';
+        row.innerHTML =
+            '<div class="top-rank-badge">' + (idx + 1) + '</div>' +
+            thumbHtml +
+            '<div class="top-media-info">' +
+                '<div class="top-media-title" title="' + item.title + '">' + item.title + '</div>' +
+                '<div class="top-media-meta">★ ' + item.score + '  •  ' + item.sub + '</div>' +
+            '</div>';
+        row.addEventListener('click', function() {
+            switchTab(type === 'anime' ? 'anime-section' : 'manga-section', null);
+        });
+        listEl.appendChild(row);
+    });
 }
+
 async function loadMediaSpotlight(type, containerId) {
-const grid = document.getElementById(containerId);
-if (!grid) return;
-const items = await fetchTopMediaData(type);
-grid.innerHTML = '';
-items.forEach(function(item, idx) {
-const card = document.createElement('div');
-card.className = 'anime-poster-card';
-const initial = item.title.charAt(0).toUpperCase();
-const imgHtml = item.img
-? ''
-: '';
-card.innerHTML =
-'' + initial + '' +
-imgHtml +
-'#' + (idx + 1) + '' +
-'★ ' + item.score + '' +
-'' +
-'' + item.title + '' +
-'' + item.sub + '' +
-'';
-grid.appendChild(card);
-});
+    const grid = document.getElementById(containerId);
+    if (!grid) return;
+
+    const items = await fetchTopMediaData(type);
+    grid.innerHTML = '';
+
+    items.forEach(function(item, idx) {
+        const card = document.createElement('div');
+        card.className = 'anime-poster-card';
+        const initial = item.title.charAt(0).toUpperCase();
+        const imgHtml = item.img
+            ? '<img src="' + item.img + '" alt="' + item.title + '" loading="lazy" onerror="this.style.display=\'none\'">'
+            : '';
+
+        card.innerHTML =
+            '<div class="poster-fallback-bg">' + initial + '</div>' +
+            imgHtml +
+            '<span class="anime-poster-rank">#' + (idx + 1) + '</span>' +
+            '<span class="anime-poster-score">★ ' + item.score + '</span>' +
+            '<div class="anime-poster-overlay">' +
+                '<div class="anime-poster-title">' + item.title + '</div>' +
+                '<div class="anime-poster-sub">' + item.sub + '</div>' +
+            '</div>';
+        grid.appendChild(card);
+    });
 }
+
 document.addEventListener('DOMContentLoaded', function() {
-setTheme(localStorage.getItem('nox_theme') || 'violet');
-if (localStorage.getItem('nox_light_mode') === 'true') applyLightMode(true);
-renderHeroSelectors();
-renderHeroSlide(0);
-loadGamesGrid();
-loadStreamsGrid();
-renderHomeWidgets();
-renderRecentGames();
-switchTopMedia('anime');
-loadMediaSpotlight('anime', 'anime-spotlight-grid');
-setTimeout(function() {
-loadMediaSpotlight('manga', 'manga-spotlight-grid');
-}, 1200);
+    renderHeroSelectors();
+    renderHeroSlide(0);
+    loadGamesGrid();
+    loadStreamsGrid();
+    renderHomeWidgets();
+    renderRecentGames();
+
+    switchTopMedia('anime');
+    loadMediaSpotlight('anime', 'anime-spotlight-grid');
+    setTimeout(function() {
+        loadMediaSpotlight('manga', 'manga-spotlight-grid');
+    }, 1200);
 });
