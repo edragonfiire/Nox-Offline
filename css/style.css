@@ -53,13 +53,17 @@ body {
     display: flex;
     align-items: center;
     gap: 11px;
-    font-family: 'Varino', 'Audiowide', sans-serif;
-    font-size: 22px;
-    letter-spacing: 5px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 27px;
+    letter-spacing: 4px;
     cursor: pointer;
-    padding-left: 6px;
-    color: #ffffff;
-    text-shadow: 0 0 18px rgba(139, 92, 246, 0.55);
+    padding-left: 4px;
+    background: linear-gradient(90deg, #ffffff 45%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.5));
 }
 
 .brand-icon {
@@ -70,12 +74,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Varino', 'Audiowide', sans-serif;
-    font-size: 14px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 18px;
     letter-spacing: 0;
     color: #fff;
+    -webkit-text-fill-color: #fff;
     box-shadow: 0 4px 14px rgba(124, 58, 237, 0.45);
-    text-shadow: none;
 }
 
 .side-nav {
