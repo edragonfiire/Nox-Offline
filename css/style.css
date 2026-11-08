@@ -954,3 +954,67 @@ transition: all 0.15s ease;
 .anime-poster-rank, .anime-poster-score, .anime-poster-overlay {
     z-index: 2;
 }
+.subpage-title, .hero-title {
+    background: linear-gradient(90deg, #ffffff 25%, #c4b5fd 70%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-header h2 {
+    color: #e9d5ff;
+    letter-spacing: 0.3px;
+}
+
+.subpage-sub, .portal-card-desc, .hero-desc {
+    color: #94a3b8;
+}
+
+.portal-card-title {
+    color: #e0f2fe;
+    transition: color 0.15s ease;
+}
+
+.portal-card:hover .portal-card-title {
+    color: #c4b5fd;
+}
+
+.portal-card-footer {
+    color: var(--accent-cyan);
+}
+
+.game-link > div {
+    color: #e2e8f0;
+    transition: color 0.15s ease;
+}
+
+.game-link:hover > div {
+    color: #c4b5fd;
+}
+
+.anime-poster-title {
+    color: #f8fafc;
+}
+
+.anime-poster-sub {
+    color: #a78bfa;
+    font-weight: 600;
+}
+
+.quick-item-title, .recent-item-title {
+    color: #e2e8f0;
+}
+
+.quick-item:hover .quick-item-title,
+.recent-item:hover .recent-item-title,
+.top-media-item:hover .top-media-title {
+    color: #38bdf8;
+}
+
+.quick-item-status {
+    color: #a78bfa;
+    font-weight: 500;
+}
+
+.profile-name {
+    color: #c4b5fd;
+}
