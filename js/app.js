@@ -55,18 +55,20 @@ const topMediaCache = { anime: null, manga: null };
 
 const fallbackTopMedia = {
     anime: [
-        { title: "Frieren: Beyond Journey's End", score: "9.32", sub: "28 eps", img: "" },
-        { title: "Fullmetal Alchemist: Brotherhood", score: "9.09", sub: "64 eps", img: "" },
-        { title: "Steins;Gate", score: "9.07", sub: "24 eps", img: "" },
-        { title: "Attack on Titan", score: "8.95", sub: "Final Season", img: "" },
-        { title: "Hunter x Hunter (2011)", score: "9.03", sub: "148 eps", img: "" }
+        { title: "Frieren: Beyond Journey's End", score: "9.32", sub: "28 eps", img: "https://myanimelist.net" },
+        { title: "Fullmetal Alchemist: Brotherhood", score: "9.09", sub: "64 eps", img: "https://myanimelist.net" },
+        { title: "Steins;Gate", score: "9.07", sub: "24 eps", img: "https://myanimelist.net" },
+        { title: "Attack on Titan", score: "8.95", sub: "Final Season", img: "https://myanimelist.net" },
+        { title: "Hunter x Hunter (2011)", score: "9.03", sub: "148 eps", img: "https://myanimelist.net" },
+        { title: "Bleach: Thousand-Year Blood War", score: "9.02", sub: "Part 3", img: "https://myanimelist.net" }
     ],
     manga: [
-        { title: "Berserk", score: "9.47", sub: "375+ ch", img: "" },
-        { title: "JoJo Part 7: Steel Ball Run", score: "9.30", sub: "95 ch", img: "" },
-        { title: "Vagabond", score: "9.25", sub: "327 ch", img: "" },
-        { title: "One Piece", score: "9.22", sub: "1100+ ch", img: "" },
-        { title: "Monster", score: "9.15", sub: "162 ch", img: "" }
+        { title: "Berserk", score: "9.47", sub: "375+ ch", img: "https://myanimelist.net" },
+        { title: "JoJo Part 7: Steel Ball Run", score: "9.30", sub: "95 ch", img: "https://myanimelist.net" },
+        { title: "Vagabond", score: "9.25", sub: "327 ch", img: "https://myanimelist.net" },
+        { title: "One Piece", score: "9.22", sub: "1100+ ch", img: "https://myanimelist.net" },
+        { title: "Monster", score: "9.15", sub: "162 ch", img: "https://myanimelist.net" },
+        { title: "Vinland Saga", score: "9.06", sub: "210+ ch", img: "https://myanimelist.net" }
     ]
 };
 
