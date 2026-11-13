@@ -453,6 +453,27 @@ async function loadMediaSpotlight(type, containerId) {
     });
 }
 
+function loadSpotifyEmbed() {
+    const input = document.getElementById('spotify-url-input');
+    const iframe = document.getElementById('spotify-embed-frame');
+    if (!input || !iframe) return;
+
+    const rawUrl = input.value.trim();
+    if (!rawUrl) return;
+
+    const spotifyRegex = /(?:open\.spotify\.com\/(?:intl-[a-z]+\/)?|spotify:)(track|album|playlist|artist|episode|show)[\/:]([a-zA-Z0-9]+)/;
+    const match = rawUrl.match(spotifyRegex);
+
+    if (match && match.at(1) && match.at(2)) {
+        const type = match.at(1);
+        const id = match.at(2);
+        iframe.src = "https://spotify.com" + type + "/" + id + "?utm_source=generator&theme=0";
+        input.value = '';
+    } else {
+        alert('Please paste a valid Spotify track, album, playlist, or podcast link.');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     renderHeroSelectors();
     renderHeroSlide(0);
@@ -467,3 +488,4 @@ document.addEventListener('DOMContentLoaded', function() {
         loadMediaSpotlight('manga', 'manga-spotlight-grid');
     }, 1200);
 });
+
