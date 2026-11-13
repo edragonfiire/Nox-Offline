@@ -259,7 +259,10 @@ function loadStreamsGrid() {
     const defaultMeta = {
         "anime-section": { tag: "ANIME", desc: "Stream episodes directly inside your active browser tab." },
         "manga-section": { tag: "MANGA", desc: "Read chapters and series inside your active browser tab." },
-        "video-section": { tag: "PLAYER", desc: "Watch embeds or load local video files seamlessly." }
+        "video-section": { tag: "PLAYER", desc: "Watch embeds or load local video files seamlessly." },
+        "movies-section": { tag: "MOVIES", desc: "Stream movies and shows directly inside your active browser tab." },
+        "livetv-section": { tag: "LIVE TV", desc: "Watch live television channels inside Nox." },
+        "sports-section": { tag: "SPORTS", desc: "Stream live games and sports events directly in the player." }
     };
 
     streamsList.forEach(function(item) {
