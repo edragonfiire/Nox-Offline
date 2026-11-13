@@ -465,9 +465,9 @@ function loadSpotifyEmbed() {
     const match = rawUrl.match(spotifyRegex);
 
     if (match && match.at(1) && match.at(2)) {
-        const type = match.at(1);
-        const id = match.at(2);
-        iframe.src = "https://spotify.com" + type + "/" + id + "?utm_source=generator&theme=0";
+        const mediaType = match.at(1);
+        const mediaId = match.at(2);
+        iframe.src = "https://spotify.com" + mediaType + "/" + mediaId + "?utm_source=generator&theme=0";
         input.value = '';
     } else {
         alert('Please paste a valid Spotify track, album, playlist, or podcast link.');
