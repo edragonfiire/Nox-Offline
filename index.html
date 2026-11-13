@@ -43,7 +43,6 @@
                 <button class="nav-tab-btn" onclick="launchRandomGame()">Random</button>
             </nav>
 
-
             <div class="sidebar-promo-card">
                 <div class="promo-title">Full Collection</div>
                 <p>Browse all titles and manage your saved favorites.</p>
@@ -96,7 +95,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="games-section" class="tab-content" style="display: none;">
                 <div class="subpage-banner">
                     <div>
@@ -155,6 +153,39 @@
                 </div>
                 <div class="portal-grid"></div>
             </div>
+
+            <div id="movies-section" class="tab-content" style="display: none;">
+                <div class="subpage-banner">
+                    <div>
+                        <div class="subpage-kicker">CINEMA HUB</div>
+                        <h2 class="subpage-title">Movies & Shows</h2>
+                        <p class="subpage-sub">Select a streaming portal below to watch inside the player.</p>
+                    </div>
+                </div>
+                <div class="portal-grid"></div>
+            </div>
+
+            <div id="livetv-section" class="tab-content" style="display: none;">
+                <div class="subpage-banner">
+                    <div>
+                        <div class="subpage-kicker">BROADCASTS</div>
+                        <h2 class="subpage-title">Live TV</h2>
+                        <p class="subpage-sub">Select a live channel portal below to open in this tab.</p>
+                    </div>
+                </div>
+                <div class="portal-grid"></div>
+            </div>
+
+            <div id="sports-section" class="tab-content" style="display: none;">
+                <div class="subpage-banner">
+                    <div>
+                        <div class="subpage-kicker">LIVE ARENA</div>
+                        <h2 class="subpage-title">Live Sports</h2>
+                        <p class="subpage-sub">Select a sports stream portal below to launch in the player.</p>
+                    </div>
+                </div>
+                <div class="portal-grid"></div>
+            </div>
         </main>
 
         <aside class="right-sidebar">
@@ -177,7 +208,7 @@
                     <input type="text" id="spotify-url-input" placeholder="Paste Spotify link..." onkeydown="if(event.key==='Enter') loadSpotifyEmbed()">
                     <button onclick="loadSpotifyEmbed()">Load</button>
                 </div>
-               <iframe
+                <iframe
                     id="spotify-embed-frame"
                     style="border-radius: 12px;"
                     src="https://spotify.com"
@@ -188,7 +219,6 @@
                     loading="lazy">
                 </iframe>
             </div>
-
 
             <div class="sidebar-divider"></div>
 
